@@ -4,6 +4,7 @@ var path = require('path');
 const bodyparser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 var cookieParser = require('cookie-parser');
+const session = require("express-session");
 var logger = require('morgan');
 const mongooseConnection=require("./Connections/mongoose")
 const mongooseSchema=require("./Connections/UserSchema")
@@ -29,12 +30,23 @@ app.use((req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(
+  session({
+    secret: uuidv4(),
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("assets", express.static(path.join(__dirname, "public/assets")));
+app.use("/assetsAdmin", express.static(path.join(__dirname, "public/AdminAssets")));
+app.use("/plugins", express.static(path.join(__dirname, "public/AdminAssets/plugins")));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/admin",adminRouter)
