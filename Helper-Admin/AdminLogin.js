@@ -2,13 +2,14 @@ require("dotenv").config();
 
 const SessionCheck= (req,res,next)=>
 {
-  if(!req.session.admin) {
+  if(req.session.admin) {
    
 res.render("admin/AdminLogin",{Authentication:req.query.LoginAgain,LogoutAdmin:req.query.Logout})
 }
 next();
 }
-const AdminLogin = (req, res) => {
+const AdminLogin = (req, res) => 
+{
 
   if (
     req.body.email == process.env.AdminUserName &&

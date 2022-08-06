@@ -12,9 +12,9 @@ router.get("/User-login", (req, res) => {
   res.render("user/User-login");
 });
 
-router.get("/My-account", (req, res) => { 
+router.get("/My-account", (req, res) => {
   res.render("user/User-profile");
-}); 
+});
 
 router.post("/Create-account", UserHelper.New_user, (req, res) => {});
 
