@@ -11,9 +11,11 @@
       </tr>
     </thead>
     <tbody>
+      <% for(let i=0;i<locals.UserData.length;i++){ %>
       <tr>
-        <td>
-          <div class="d-flex align-items-center">
+        
+          <td><%= UserData[i].username %></td>
+          <!-- <div class="d-flex align-items-center">
             <img
                 src="https://mdbootstrap.com/img/new/avatars/8.jpg"
                 alt=""
@@ -24,99 +26,35 @@
               <p class="fw-bold mb-1">John Doe</p>
               <p class="text-muted mb-0">john.doe@gmail.com</p>
             </div>
-          </div>
+          </div> -->
+
         </td>
         <td>
-          <p class="fw-normal mb-1">Software engineer</p>
-          <p class="text-muted mb-0">IT department</p>
+          <!-- <p class="fw-normal mb-1">Software engineer</p>
+          <p class="text-muted mb-0">IT department</p> -->
+          <%= UserData[i].email %>
         </td>
         <td>
        
-        90000000
+          <%= UserData[i].phone %>
          
       
         </td>
         <td>
-            <% if(0){ %>
-                <button type="button" class="btn btn-success rounded-pill">Active</button>
+            <% if(!UserData[i].isBlocked){ %>
+                <button onclick="location.href='/admin/active?status=<%= UserData[i].isBlocked  %>&id=<%= UserData[i]._id  %>  '" type="button" class="btn btn-success rounded-pill"> Active </button>
               <% } else{ %>  
-                <button type="button" class="btn btn-danger rounded-pill">Danger</button>
+                <button onclick="location.href='/admin/active?status=<%= UserData[i].isBlocked  %>&id=<%= UserData[i]._id  %>  '"  type="button" class="btn btn-danger rounded-pill">Deactivated</button>
              <% } %>
         </td>
+      
         <td>
           <button type="button" class="btn btn-link btn-sm btn-rounded">
             Edit
           </button>
         </td>
       </tr>
-      <tr>
-        <td>
-          <div class="d-flex align-items-center">
-            <img
-                src="https://mdbootstrap.com/img/new/avatars/6.jpg"
-                class="rounded-circle"
-                alt=""
-                style="width: 45px; height: 45px"
-                />
-            <div class="ms-3">
-              <p class="fw-bold mb-1">Alex Ray</p>
-              <p class="text-muted mb-0">alex.ray@gmail.com</p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="fw-normal mb-1">Consultant</p>
-          <p class="text-muted mb-0">Finance</p>
-        </td>
-        <td>
-          <span class="badge badge-primary rounded-pill d-inline"
-                >Onboarding</span
-            >
-        </td>
-        <td>Junior</td>
-        <td>
-          <button
-                  type="button"
-                  class="btn btn-link btn-rounded btn-sm fw-bold"
-                  data-mdb-ripple-color="dark"
-                  >
-            Edit
-          </button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="d-flex align-items-center">
-            <img
-                src="https://mdbootstrap.com/img/new/avatars/7.jpg"
-                class="rounded-circle"
-                alt=""
-                style="width: 45px; height: 45px"
-                />
-            <div class="ms-3">
-              <p class="fw-bold mb-1">Kate Hunington</p>
-              <p class="text-muted mb-0">kate.hunington@gmail.com</p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="fw-normal mb-1">Designer</p>
-          <p class="text-muted mb-0">UI/UX</p>
-        </td>
-        <td>
-          <span class="badge badge-warning rounded-pill d-inline">Awaiting</span>
-        </td>
-        <td>Senior</td>
-        <td>
-          <button
-                  type="button"
-                  class="btn btn-link btn-rounded btn-sm fw-bold"
-                  data-mdb-ripple-color="dark"
-                  >
-            Edit
-          </button>
-        </td>
-      </tr>
+      <% } %>
     </tbody>
   </table>
 <%- include("partials/footer") %> 

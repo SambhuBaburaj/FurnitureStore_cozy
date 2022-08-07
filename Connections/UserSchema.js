@@ -4,7 +4,7 @@ const User_Schema = new mongoose.Schema({
     email: String,
     password: String,
     phone:Number,
-    Block:Number
+    isBlocked:Number
   });
   const user_data = mongoose.model("user_data", User_Schema);
 

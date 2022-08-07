@@ -13,12 +13,23 @@ router.get("/Logout", (req, res) => {
   req.session.admin = null;
   res.redirect("/admin?Logout=logout success");
 });
-router.get("/UsersDetails",AdminHelper.SessionCheck,(req,res)=>
+const a= AdminHelper.FindData
+router.get("/UsersDetails",AdminHelper.SessionCheck,AdminHelper.FindData,(req,res)=>
 {
-  res.render("admin/UsersDetails")
+
+
+
+  // res.send("evjvs")       
+  // res.render("admin/UsersDetails")
 })
 
 
+router.get("/active",AdminHelper.StatusChange,(req,res)=>
+{
+res.redirect("/admin/UsersDetails")
+
+
+})
 
 
 module.exports = router;
