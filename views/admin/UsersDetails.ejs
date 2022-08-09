@@ -41,20 +41,25 @@
       
         </td>
         <td>
-            <% if(!UserData[i].isBlocked){ %>
-                <button onclick="location.href='/admin/active?status=<%= UserData[i].isBlocked  %>&id=<%= UserData[i]._id  %>  '" type="button" class="btn btn-success rounded-pill"> Active </button>
-              <% } else{ %>  
-                <button onclick="location.href='/admin/active?status=<%= UserData[i].isBlocked  %>&id=<%= UserData[i]._id  %>  '"  type="button" class="btn btn-danger rounded-pill">Deactivated</button>
-             <% } %>
+            <% if(UserData[i].isBlocked==0){ %> 
+              <button onclick="deleteProduct('<%= UserData[i].isBlocked  %>','<%= UserData[i]._id  %>')" type="button" class="btn btn-success rounded-pill">Active</button>
+             
+            
+                <% } else{ %>  
+              
+                  <button onclick="location.href='/admin/Active?status=<%= UserData[i].isBlocked  %>&id=<%= UserData[i]._id  %>  '"  type="button" class="btn btn-danger rounded-pill">Deactivated</button>
+          
+                  <% } %>
         </td>
       
         <td>
           <button type="button" class="btn btn-link btn-sm btn-rounded">
             Edit
           </button>
-        </td>
+        </td>                   
       </tr>
       <% } %>
     </tbody>
   </table>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <%- include("partials/footer") %> 

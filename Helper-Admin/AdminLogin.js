@@ -46,22 +46,27 @@ next()
 }
 const StatusChange=async(req,res,next)=>
 {
-  const status=req.query.status
-  const id=req.query.id
-  console.log(id);
-  if(status==1)
-  {
+  const status=req.params.values
+  // const id=status[0]
+  console.log(status);
+  // console.log(status.status);
     console.log("ok");
- await mongoConnection.user_data.updateOne(  { _id: id },{$set:{isBlocked:0}})
-  }
-  else
-  {
-    console.log("not ok");
-   await mongoConnection.user_data.updateOne({_id:id},{$set:{isBlocked:1}})
-  } 
+ await mongoConnection.user_data.updateOne(  { _id: status },{$set:{isBlocked:1}})
+  
+  // else 
+  // {
+  //   console.log("not ok");
+  //  await mongoConnection.user_data.updateOne({_id:id},{$set:{isBlocked:1}})
+  // } 
 next()
 }
-
+const UnBlock=async(req,res,next)=>
+{
+  console.log("its here");
+  const id=req.query.id
+  await mongoConnection.user_data.updateOne({_id:id},{$set:{isBlocked:0}})
+  next()
+}
 
 
 
@@ -70,5 +75,6 @@ module.exports = {
   HomePage,
 SessionCheck,
 FindData,
-StatusChange
+StatusChange,
+UnBlock
 }

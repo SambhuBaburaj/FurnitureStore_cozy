@@ -22,14 +22,22 @@ router.get("/UsersDetails",AdminHelper.SessionCheck,AdminHelper.FindData,(req,re
   // res.send("evjvs")       
   // res.render("admin/UsersDetails")
 })
+  
 
-
-router.get("/active",AdminHelper.StatusChange,(req,res)=>
+router.get("/DeActive/:values",AdminHelper.StatusChange,(req,res)=>
 {
+// console.log(req.params.values);
 res.redirect("/admin/UsersDetails")
 
-
+})
+router.get("/Active",AdminHelper.UnBlock,(req,res)=>{
+  res.redirect("/admin/UsersDetails")
 })
 
+router.get("/Dashboard",(req,res)=>
+{
+
+  res.redirect("/admin/home")
+})
 
 module.exports = router;
