@@ -30,11 +30,17 @@
                                       </div>
                                       <% } %> 
                             <div id="lg1" class="tab-pane active">
+                                
                                 <div class="login-form-container">
+                                 
+
+                                 
+
+
                                     <div class="login-register-form">
-                                        <form action="#" method="post">
-                                            <input type="text" name="user-name" placeholder="Username" />
-                                            <input type="password" name="user-password" placeholder="Password" />
+                                        <form action="/login" method="post">
+                                            <input type="text" name="email" placeholder="Username" />
+                                            <input type="password" name="password" placeholder="Password" />
                                             <div class="button-box">
                                                 <div class="login-toggle-btn">
                                                     <input type="checkbox" />
@@ -42,8 +48,19 @@
                                                     <a href="#">Forgot Password?</a>
                                                 </div>
                                                 <button type="submit"><span>Login</span></button>
+
+                                             
+
                                             </div>
-                                        </form>
+
+                                        </form action="/LoginOTP">
+                                        <div class="position-abselute button-box mb-5">
+                                           
+                                            <button onclick="location.href='/LoginOTP'"  class="float-right " type="submit"><span>OTP Login</span></button>
+
+                            
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -62,12 +79,30 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="lg3" class="tab-pane">
+                                
+                                <div class="login-form-container">
+                                    <div class="login-register-form">
+                                        <form action="/Create-account" method="post">
+                                            
+                                          
+                                            <input name="Phone" placeholder="Phone number" type="tel" />
+                                            <div class="button-box">
+                                                <button type="submit"><span>OTP logIN</span></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- login area end -->
 
     <!-- Footer Area Start -->

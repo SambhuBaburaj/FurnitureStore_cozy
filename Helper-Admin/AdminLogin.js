@@ -51,14 +51,17 @@ const StatusChange=async(req,res,next)=>
   console.log(status);
   // console.log(status.status);
     console.log("ok");
- await mongoConnection.user_data.updateOne(  { _id: status },{$set:{isBlocked:1}})
+ await mongoConnection.user_data.updateOne(  { _id: status },{$set:{isBlocked:1}}).then((response) => {
+
+  res.json(response)
+ 
+ })
   
   // else 
   // {
   //   console.log("not ok");
   //  await mongoConnection.user_data.updateOne({_id:id},{$set:{isBlocked:1}})
   // } 
-next()
 }
 const UnBlock=async(req,res,next)=>
 {

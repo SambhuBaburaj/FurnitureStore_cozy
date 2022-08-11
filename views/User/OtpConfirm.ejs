@@ -1,0 +1,165 @@
+<%- include('partials/header') %>
+    <!-- breadcrumb-area end -->
+
+    <!-- login area start -->
+    <div class="login-register-area pt-100px pb-100px">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+                    <div class="login-register-wrapper">
+                        <div class="login-register-tab-list nav">
+                            <a class="active" data-bs-toggle="tab" href="#lg1">
+                                <h4>login otp</h4>
+                            </a>
+                         
+                        </div>
+                        
+                        <div class="tab-content">
+                           
+                            <div id="lg1" class="tab-pane active">
+                                
+                                <div class="login-form-container">
+                                 
+
+                                 
+                                 <span>enter your otp for <%= locals.number %> </span> 
+
+                                    <div class="login-register-form">
+                                        <form action="/OtpValidation" method="post" id="phonenumbervarification"  >
+                                            <input type="hidden" name="number" value="<%= number%>">
+                                            <input id="otp" type="tel" name="otp" placeholder="OTP" />
+                                   
+                                            <div class="button-box">
+                                                <div class="login-toggle-btn">
+                                                 
+                                                </div>
+                                                <button type="submit"><span>confirm otp</span></button>
+
+                                             
+
+                                            </div>
+</form>
+                                     
+                                    </div>
+                                </div>
+                            </div>
+                            
+                          
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- adding popup -->
+
+
+
+
+
+
+<!-- <script>
+$("#phonenumbervarification").submit((event) => {
+  
+const a=document.getElementById("phonenumber").value
+
+
+  event.preventDefault()
+
+// swal({
+//   text: 'Search for a movie. e.g. "La La Land".',
+//   content: "input",
+//   button: {
+//     text: "Search!",
+//     closeModal: false,
+//   },
+// })
+
+
+
+$.ajax({
+
+    url: "/otplogin",
+    method: "POST",
+    data: {a},
+    success: (verification) => {
+      if (verification.otp) {
+        swal("Write something here:", {
+  content: "input",
+})
+.then((value) => {
+//   swal(`You typed: ${value}`);
+alert("${value}")
+$.ajax({
+
+url:"/otpconfirmation",
+method:post,
+data:{value}
+})
+
+
+
+
+});
+
+      } else {
+        alert("Please enter the correct passsword ");
+      }
+    },
+  });
+});
+   
+
+  </script>
+   -->
+
+
+    
+    <!-- login area end -->
+
+    <!-- Footer Area Start -->
+   
+                        <!-- Start single blog -->
+                        <%- include('partials/footer') %>
+
+
+
+
+
+
+    <!-- Global Vendor, plugins JS -->
+
+    <!-- Vendor JS -->
+    <!-- <script src="assets/js/vendor/jquery-3.5.1.min.js"></script>
+    <script src="assets/js/vendor/popper.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/modernizr-3.11.2.min.js"></script> -->
+
+    <!--Plugins JS-->
+    <!-- <script src="assets/js/plugins/swiper-bundle.min.js"></script>
+    <script src="assets/js/plugins/jquery-ui.min.js"></script>
+    <script src="assets/js/plugins/jquery.nice-select.min.js"></script>
+    <script src="assets/js/plugins/countdown.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.waypoints.js"></script>
+    <script src="assets/js/plugins/jquery.lineProgressbar.js"></script>
+    <script src="assets/js/plugins/jquery.zoom.min.js"></script>
+    <script src="assets/js/plugins/venobox.min.js"></script>
+    <script src="assets/js/plugins/ajax-mail.js"></script> -->
+
+    <!-- Use the minified version files listed below for better performance and remove the files listed above -->
+    <script src="assets/js/vendor/vendor.min.js"></script>
+    <script src="assets/js/plugins/plugins.min.js"></script>
+
+    <!-- Main Js -->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

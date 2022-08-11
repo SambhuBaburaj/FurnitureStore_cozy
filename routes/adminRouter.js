@@ -9,15 +9,15 @@ router.post("/Login", AdminHelper.AdminLogin);
 
 router.get("/home", AdminHelper.SessionCheck, AdminHelper.HomePage);
 
-router.get("/Logout", (req, res) => {
+router.get("/Logout", (req, res) => { 
   req.session.admin = null;
   res.redirect("/admin?Logout=logout success");
 });
 const a= AdminHelper.FindData
 router.get("/UsersDetails",AdminHelper.SessionCheck,AdminHelper.FindData,(req,res)=>
 {
-
-
+ 
+ 
 
   // res.send("evjvs")       
   // res.render("admin/UsersDetails")
@@ -27,7 +27,7 @@ router.get("/UsersDetails",AdminHelper.SessionCheck,AdminHelper.FindData,(req,re
 router.get("/DeActive/:values",AdminHelper.StatusChange,(req,res)=>
 {
 // console.log(req.params.values);
-res.redirect("/admin/UsersDetails")
+// res.redirect("/admin/UsersDetails")
 
 })
 router.get("/Active",AdminHelper.UnBlock,(req,res)=>{
@@ -39,5 +39,10 @@ router.get("/Dashboard",(req,res)=>
 
   res.redirect("/admin/home")
 })
+router.get("/AddCategory",(req,res)=>
+{
+  res.render("admin/Category")
+})
 
 module.exports = router;
+ 
