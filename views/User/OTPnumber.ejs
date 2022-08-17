@@ -19,14 +19,14 @@
                             <div id="lg1" class="tab-pane active">
                                 
                                 <div class="login-form-container">
-                                 
+                                 <% if(locals.wrongnumber) { %> 
 
-                                 
-
+                                 <div style="color: red;" class="alert alert-danger"><%= locals.wrongnumber  %> </div>
+<% } %> 
 
                                     <div class="login-register-form">
                                         <form  action="/numberentry" method="post" id="phonenumbervarification"  >
-                                            <input id="phonenumber" type="tel" name="PhoneNumber" placeholder="otp" />
+                                            <input id="phonenumber" type="tel" name="PhoneNumber" placeholder="enter the number" />
                                     
                                             <div class="button-box">
                                                 <div class="login-toggle-btn">

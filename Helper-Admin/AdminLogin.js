@@ -3,7 +3,7 @@ const mongoConnection=require("../Connections/UserSchema")
 const mongoose = require("mongoose");
 const SessionCheck= (req,res,next)=>
 {
-  if(req.session.admin) {
+  if(!req.session.admin) {
    
 res.render("admin/AdminLogin",{Authentication:req.query.LoginAgain,LogoutAdmin:req.query.Logout})
 }
@@ -12,7 +12,7 @@ next();
 const AdminLogin = (req, res) => 
 {
 
-  if (
+  if ( 
     req.body.email == process.env.AdminUserName &&
     req.body.password == process.env.AdminPassword
   ) {
@@ -43,9 +43,11 @@ const FindData=function(req,res,next)
   });
   
 next()
+
 }
 const StatusChange=async(req,res,next)=>
 {
+  
   const status=req.params.values
   // const id=status[0]
   console.log(status);

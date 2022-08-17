@@ -9,13 +9,23 @@ var logger = require('morgan');
 const mongooseConnection=require("./Connections/mongoose")
 const mongooseSchema=require("./Connections/UserSchema")
 
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var adminRouter=require("./routes/adminRouter")
+var adminRouter=require("./routes/adminRouter");
+const multer = require('multer');
+const upload = multer()
 var app = express();
+
+// if the code get broken this is it
+require("dotenv").config();
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
+
+
+
 
 app.use((req, res, next) => { 
   if (!req.user) {
@@ -54,19 +64,28 @@ app.use("/admin",adminRouter)
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});  
+
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
+
+// // error handler
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+//   // render the error page
+//   res.status(err.status || 500);
+
+//   if(req.session.user)
+//   {
+//   res.render("user/page404");
+//   }
+// });  
+
+
 
 module.exports = app;

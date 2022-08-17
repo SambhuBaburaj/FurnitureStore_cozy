@@ -20,13 +20,15 @@
                                 
                                 <div class="login-form-container">
                                  
-
+<% if(locals.otpvalue) { %> 
+     <div class="alert alert-danger" style="color: red;"><%= locals.otpvalue  %></div>
+    <% } %> 
                                  
                                  <span>enter your otp for <%= locals.number %> </span> 
 
                                     <div class="login-register-form">
                                         <form action="/OtpValidation" method="post" id="phonenumbervarification"  >
-                                            <input type="hidden" name="number" value="<%= number%>">
+                                            <input type="hidden" name="number" value="<%= locals.number%>">
                                             <input id="otp" type="tel" name="otp" placeholder="OTP" />
                                    
                                             <div class="button-box">

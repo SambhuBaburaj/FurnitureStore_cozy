@@ -17,8 +17,29 @@
 <script src="/assetsAdmin/js/confirmation.js"></script>
     <!-- App js -->
     <script src="/assetsAdmin/js/app.js"></script>
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/JavaScript">
+        function createNewElement() {
+            // First create a DIV element.
+            var txtNewInputBox = document.createElement('div');
+        
+            // Then add the content (a new input box) of the element.
+            txtNewInputBox.innerHTML = "<div class='row m-t-10 form-group'><input name='SubCategory' class='col-lg-10 form-control' type='text' id='first_item' class='form-control' ><button id='removeRow' type='button' class='btn btn-danger'>Remove</button></div>";
+         
+            // Finally put it where it is supposed to appear.
+            document.getElementById("newElementId").appendChild(txtNewInputBox);
+        }
+        </script>
+        <script src="/assetsAdmin/js/myajax.js"></script>
+       <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js" type="text/javascript"></script> -->
+       
+            
+        </script>
 </body>
 
 </html>

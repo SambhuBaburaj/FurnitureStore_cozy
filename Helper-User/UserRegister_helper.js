@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
-
 const SessionCheck=(req,res)=>
 {
 if(!req.session.user)
@@ -69,8 +68,10 @@ const Login=async(req,res)=>
     const password = req.body.password;
 
 const CheckName = await mongoConnection.user_data.findOne({ email: username });
+const block= CheckName.isBlocked
+console.log(block);
 
-if (CheckName) {
+if (CheckName && block==0) {
   const PasswordMatch = await bcrypt.compare(password, CheckName.password);
   if (PasswordMatch) {
     req.session.user = req.body.email;
@@ -83,7 +84,7 @@ if (CheckName) {
     });
   }
 } else {
-  res.render("base", {
+  res.render("user/User-login", {
     title: "express",
     duplicate: "email/password is incorrect",
   });
@@ -99,10 +100,10 @@ next()
 const NumberVerification =async(req,res,next)=>
 {
   const MobileNumber=req.body.PhoneNumber
-  console.log(MobileNumber);
+  // console.log(MobileNumber);
   const CheckNumber = await mongoConnection.user_data.findOne({ phone: MobileNumber })
  
-  console.log(CheckNumber);
+  // console.log(CheckNumber);
   // .then((verification) => {
 
   //   res.json({otp:true})
@@ -119,43 +120,14 @@ const NumberVerification =async(req,res,next)=>
     .catch((err)=>console.log("its an error",err));
 }
 
-
-
-
-// console.log("hello hi");
-//     client.verify.v2.services(process.env.SERVICE_ID)
-//     .verifications
-//     .create({to: '+91'+MobileNumber, channel: 'sms'})
-//     .then((verification) => {
-//       console.log("its  here");
-//       res.render("user/OtpConfirm",{number:MobileNumber})
-//     })
-//     .catch((err)=>console.log("its an error",err));
-
-
-
-    // client.verify.v2.services(process.env.SERVICE_ID)
-    // .verifications
-    // .create({to: '+91'+MobileNumber, channel: 'sms'})
-    
-      // res.json({otp:true})
-      
    
   else
   {
-console.log("error");
+res.render("user/OTPnumber",{wrongnumber:"entered number does not exist"})
 
   }
 next()
 }
-
-
-// async function otpsession(mobileNumber){
-
-//   const CheckNumber = await mongoConnection.user_data.findOne({ phone: mobileNumber})
-//   req.session.user = CheckNumber.email;
-//   res.redirect("/");
-// }
 
 const OtpValidation=(req,res,next)=>
 {
@@ -171,16 +143,14 @@ const OtpValidation=(req,res,next)=>
        if(verification_check.valid){
         //  otpsession(mobileNumber)
           const CheckNumber = await mongoConnection.user_data.findOne({ phone: mobileNumber})
-          
+          console.log(CheckNumber.email);
           req.session.user=CheckNumber.email
-          res.redirect("/")
-
-          
+          res.redirect("/")        
           next()
         }else{
- 
-res.render("user/OtpConfirm",{otpvalue:"incorrect otp"})
+ console.log("its not working");
 
+res.render("user/OtpConfirm",{otpvalue:"invalid OTP"})
          next()
         }
        })

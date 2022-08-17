@@ -366,13 +366,18 @@
                         <!-- 1st tab start -->
                         <div class="tab-pane fade show active" id="tab-product-new-arrivals">
                             <div class="row">
+      
+                                <% locals.Product.forEach(function (Product) {%>
+
+
                                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6" data-aos="fade-up" data-aos-delay="200">
                                     <!-- Single Prodect -->
+        
                                     <div class="product">
                                         <div class="thumb">
                                             <a href="shop-left-sidebar.html" class="image">
-                                                <img src="assets/images/product-image/1.jpg" alt="Product" />
-                                                <img class="hover-image" src="assets/images/product-image/2.jpg" alt="Product" />
+                                                <img src="/AdminAssets/images/addProduct/<%=Product.Images[0]  %> " alt="Product" />
+                                                <img class="hover-image" src="/AdminAssets/images/addProduct/<%=Product.Images[0]  %>" alt="Product" />
                                             </a>
                                             <span class="badges">
                                                 <span class="new">New</span>
@@ -395,7 +400,15 @@
                                             </span>
                                         </div>
                                     </div>
+
+
                                 </div>
+
+
+                                <%  }) %> 
+
+
+
                                 <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6" data-aos="fade-up" data-aos-delay="400">
                                     <!-- Single Prodect -->
                                     <div class="product">

@@ -1,2 +1,186 @@
 <%- include('partials/Header') %>
-<%- include('partials/footer') %>
+
+<!-- <link rel="stylesheet" href="/assetsAdmin/css/AdminCategory" type="text/css"> -->
+
+    <!-- header-bg -->
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="page-title-box">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                       
+                        <h4 class="page-title">Category Management</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-right">
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">Stexo</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">Forms</a></li>
+                            <li class="breadcrumb-item active">Uploads Validation</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+<div>
+    <h4 class="mt-0 header-title">catrgory management</h4>
+
+    <% if(locals.Category) { %> 
+        <label class="float-right" style="color: green;" for="">Category has been added</label>
+    <% } %> 
+</div>
+                     
+                            <p class="sub-title">add main catrgory here.</p>
+
+                            <form method="post" id="categoryAdd" class="" action="/admin/AddCategory">
+                                <div class="form-group">
+                                    <label>Required</label>
+                                    <input name="MainCategory" type="text" class="form-control" required placeholder="Main Category"/>
+                                </div>
+
+                                <div id="newElementId">
+                                         
+                                </div>
+
+                               
+                                <div class="form-group">
+                                    <div class="flex float-right">
+                                        <button  onclick="createNewElement();"  type="button" class="btn btn-info">add SubCategory</button>
+                                        <button onclick="deleteElement()" id="DeleteRow" type="reset" class="btn btn-secondary waves-effect m-l-5">
+                                            Cancel
+                                        </button>
+                                       </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                                            Submit
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary waves-effect m-l-5">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+
+                <div class="col-lg-6">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+<div>
+                            <h4 class="mt-0 header-title">Add Product</h4>
+                            <% if(locals.success) { %> 
+                                <label class="float-right" style="color: green;" for="">product has been added</label>
+                            <% } %> 
+                            </div>
+                            <p class="sub-title">you can add your products here.</p>
+                               
+                            <form action="/admin/productAdd" method="post" enctype="multipart/form-data" >
+                                <select id="MainCategory" class="form-control" name="Category" onchange="callSubCategory()">
+                                    
+                                    <option value=" " selected disabled>Please select</option>
+                                    
+                                    <% for(let i=0;i<locals.category.length;i++){ %>
+                                        <option  ><%=  category[i].MainCategory %> </option>
+
+                                        <% } %> 
+                                  </select>
+
+                                  <br>
+                                  <select class="form-control" name="subCategory" id="subCatagory">
+
+                                  </select>
+
+                                <div class="form-group">
+                                    <br> 
+                                    <label>Product name</label>
+                                    <div>
+                                        <input name="ProductName" type="text" class="form-control" required
+                                               data-parsley-minlength="6" placeholder="Product name"/>
+                                    </div>
+                                    <label>Price</label>
+                                    <div>
+                                        <input name="price" type="number" class="form-control" required
+                                               data-parsley-minlength="6" placeholder="Price"/>
+                                    </div>
+                                    <label>discount</label>
+                                    <div>
+                                        <input name="DisPrice" type="number" class="form-control" required
+                                               data-parsley-minlength="6" placeholder="in percentage"/>
+
+                                    </div>
+                                    <label>Product Details</label>
+                                    <div>
+                                      <textarea placeholder="add details" name="desc" class="form-control" id="" cols="15" rows="5"></textarea> 
+                                    </div>
+
+                                    <label>images</label>
+                                    <div class="form-group">
+                                        <input multiple id="img" name="images" type="file" class="form-control"
+                                              placeholder="images"/>
+                                        <img src="#" alt="" id="imgPreview">
+                                    </div>
+                                </div>
+                          
+                              
+
+                                <!-- <div class="form-group">
+                                    <label>Min check</label>
+                                    <div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck1" data-parsley-multiple="groups"
+                                                   data-parsley-mincheck="2">
+                                             
+                                             
+                                                   <label class="custom-control-label" for="customCheck1">And this</label>
+
+                                                
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck2" data-parsley-multiple="groups"
+                                                   data-parsley-mincheck="2">
+                                            <label class="custom-control-label" for="customCheck2">Can't check this</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck3" data-parsley-multiple="groups"
+                                                   data-parsley-mincheck="2">
+                                            <label class="custom-control-label" for="customCheck3">This too</label>
+                                        </div>
+
+                                    </div>
+                                </div> -->
+
+                                <div class="form-group m-b-0">
+                                    
+                                    <div>
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                                            Submit
+                                        </button>
+                                        <button id="" type="reset" class="btn btn-secondary waves-effect m-l-5">
+                                            Cancel
+                                        </button>
+                                     
+                                    </div>
+                                </div>
+                            </form>
+                         
+                            
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+
+        </div>
+        <!-- end container-fluid -->
+    </div>
+    <!-- end wrapper -->
+    <script defer src="https://cdn.crop.guide/loader/l.js?c=LRLRTZ"></script>
+
+    <%- include("partials/footer") %> 
