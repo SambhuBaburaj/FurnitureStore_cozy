@@ -33,15 +33,15 @@ router.post("/login", UserHelper.Login,(req,res)=>
 
 })
 
-router.get("/UserLogout",UserHelper.Logout,(req,res)=>
+router.get("/UserLogout",UserHelper.Logout,async(req,res)=>
 {
- res.render("user/User-login",{logout:"logout Success",Category:req.session.Category}) 
+ res.render("user/User-login",{logout:"logout Success",Category:await CategoryList()}) 
 })
 
-router.get("/LoginOTP",(req,res)=>
+router.get("/LoginOTP",async(req,res)=>
 {
 
-res.render("user/OTPnumber",{Category:req.session.Category})
+res.render("user/OTPnumber",{Category:await CategoryList()})
 
 })
 
@@ -67,12 +67,24 @@ router.get("/SubCatList",ProductHelper.getCategory,(req,res)=>
 })
 
 
-router.get("/ProductSingle",(req,res)=>
+router.get("/ProductSingle",ProductHelper.ViewSingle,(req,res)=>
 {
-  console.log(req.query);
-  res.send("se9ug")
+
+
+
+})
+router.get("/Cart",ProductHelper.CartPage,(req,res)=>
+{
+
+
+
 })
 
+
+router.get("/AddCart",ProductHelper.AddToCart,(req,res)=>//must add session check
+{
+
+})
 
 
 module.exports = router;

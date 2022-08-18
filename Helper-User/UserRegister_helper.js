@@ -2,14 +2,30 @@ const mongoConnection = require("../Connections/UserSchema");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
+const MongoCategory=require("../Connections/AdminSchema").MainCategory
 
-const SessionCheck=(req,res)=>
+const CategoryList=async()=>
+
+{
+   return await MongoCategory.find()
+}
+
+
+
+const SessionCheck=async(req,res,next)=>
 {
 if(!req.session.user)
 {
-  res.render("user/User-login", { duplicate: "login Again" });
+  req.session.returnto=req.originalUrl
+  console.log("its here bitch",req.session.returnto);
+  res.render("user/User-login", {Category:await CategoryList()});
+
 }
-next();
+else
+{
+  next()
+}
+next()
 }
 
 const LoginSession=(req,res,next)=>
@@ -42,7 +58,7 @@ const New_user = async (req, res) => {
       isBlocked:0
     }); 
     new_user.save();
-    res.render("user/User-login",{logout:"account created"})
+    res.render("user/User-login",{logout:"account created",Category:await CategoryList()})
   }
 };
 
@@ -70,26 +86,34 @@ const Login=async(req,res)=>
 const CheckName = await mongoConnection.user_data.findOne({ email: username });
 const block= CheckName.isBlocked
 console.log(block);
-
+ 
 if (CheckName && block==0) {
   const PasswordMatch = await bcrypt.compare(password, CheckName.password);
   if (PasswordMatch) {
     req.session.user = req.body.email;
-   
-    res.redirect("/");
+   if(req.session.returnto)
+   {
+    res.redirect(req.session.returnto);
+   }
+   else{
+    res.redirect("/")
+   }
   } else {
     res.render("user/User-login", {
       title: "express",
-      duplicate: "email/password is incorrect",
+      duplicate: "email/password is incorrect",Category:await CategoryList()
     });
-  }
-} else {
+  } 
+} else { 
   res.render("user/User-login", {
     title: "express",
-    duplicate: "email/password is incorrect",
+    duplicate: "email/password is incorrect",Category:await CategoryList()
+
   });
 }
 }   
+
+
 const Logout=(req,res,next)=>
 {
 
@@ -114,8 +138,8 @@ const NumberVerification =async(req,res,next)=>
     client.verify.v2.services(process.env.SERVICE_ID)
     .verifications
     .create({to:'+91'+MobileNumber, channel: 'sms'})
-    .then((verification) => {
-    res.render("user/OtpConfirm",{number:MobileNumber})
+    .then(async(verification) => {
+    res.render("user/OtpConfirm",{number:MobileNumber,Category:await CategoryList()})
     })
     .catch((err)=>console.log("its an error",err));
 }
