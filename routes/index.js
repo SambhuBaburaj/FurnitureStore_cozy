@@ -3,7 +3,10 @@ var express = require("express");
 var router = express.Router();
 const UserHelper = require("../Helper-User/UserRegister_helper");
 ProductHelper=require("../Helper-User/Home-helper")
+MongoUserData=require("../Connections/UserSchema").user_data
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
+const MongoCart=require("../Connections/UserSchema").CartData
+const ProductStore=require("../Connections/AdminSchema").Products
 /* GET home page. */
 const CategoryList=async()=>
 
@@ -73,19 +76,48 @@ router.get("/ProductSingle",ProductHelper.ViewSingle,(req,res)=>
 
 
 })
-router.get("/Cart",ProductHelper.CartPage,(req,res)=>
+
+
+
+router.get("/AddCart",(req,res,next)=>//must add session check
 {
+  return new Promise(async (resolve, reject) => {
 
-
-
-})
-
-
-router.get("/AddCart",ProductHelper.AddToCart,(req,res)=>//must add session check
+if(!req.session.user) 
 {
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)
+  }) 
 
-})
+},ProductHelper.AddToCart,async(req,res)=>
+{
+  const UserId=await MongoUserData.findOne({email:req.session.user});
 
+cartDetails=await MongoCart.findOne({UserId:UserId._id})
+// console.log(cartDetails.product);
+const ProductId=cartDetails.product;
+// console.log(ProductId);
 
-module.exports = router;
+// const Products=[]
+// ProductId.forEach(async function  (product)
+// {
+// // console.log(product.ItemId);
+// products=await ProductStore.find({_id:product.ItemId})
+
+// console.log(Products);
+// })
+
+// const a=await MongoCart.aggregate([{$lookup:{from:'ProductDetails',localField:'product.ItemId'.ItemId,foreignField:'_id',as:'cate'}}])
+
+// console.log(a);
+// MongoCart.find({$and:{UserId:}})
+  res.render("user/Cart",{Category:await CategoryList(),CartItem:"k"})
+}
+)
  
+
+module.exports = router   

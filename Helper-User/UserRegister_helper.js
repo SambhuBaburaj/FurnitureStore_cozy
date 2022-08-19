@@ -16,9 +16,10 @@ const SessionCheck=async(req,res,next)=>
 {
 if(!req.session.user)
 {
-  req.session.returnto=req.originalUrl
-  console.log("its here bitch",req.session.returnto);
-  res.render("user/User-login", {Category:await CategoryList()});
+
+
+// res.send("greong")
+ res.redirect("/UserLogin")
 
 }
 else
@@ -34,7 +35,7 @@ const LoginSession=(req,res,next)=>
 {
   res.redirect("/")
 }
-next()
+next() 
 }
 
 
@@ -64,7 +65,7 @@ const New_user = async (req, res) => {
 
 
 
-//hashing password
+//hashing password 
 const secure_password = async (password) => {
   try {
     const password_hash = await bcrypt.hash(password, 10);
@@ -90,9 +91,12 @@ console.log(block);
 if (CheckName && block==0) {
   const PasswordMatch = await bcrypt.compare(password, CheckName.password);
   if (PasswordMatch) {
-    req.session.user = req.body.email;
+    req.session.user = req.body.email;  
+   
+console.log(req.session.returnto);
    if(req.session.returnto)
-   {
+   { 
+    console.log(req.session.returnto);
     res.redirect(req.session.returnto);
    }
    else{

@@ -1,5 +1,6 @@
 const mongoose=require("mongoose");
 const { stringify } = require("uuid");
+// user schema
 const User_Schema = new mongoose.Schema({
     username: String,
     email: String,
@@ -9,7 +10,7 @@ const User_Schema = new mongoose.Schema({
   });
   const user_data = mongoose.model("user_data", User_Schema);
 
-
+//Cart schema
 const Cart_Schema=new mongoose.Schema({
 UserId:String,
 product:[{
