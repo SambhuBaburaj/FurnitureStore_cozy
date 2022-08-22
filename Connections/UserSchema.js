@@ -10,11 +10,12 @@ const User_Schema = new mongoose.Schema({
   });
   const user_data = mongoose.model("user_data", User_Schema);
 
+  
 //Cart schema
 const Cart_Schema=new mongoose.Schema({
-UserId:String,
+UserId: mongoose.ObjectId,
 product:[{
-  ItemId:String,
+  ItemId:mongoose.ObjectId,
   Quantity:Number
 }
 ]

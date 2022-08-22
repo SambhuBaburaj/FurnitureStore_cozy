@@ -99,9 +99,15 @@
                                 <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                             </div>
                             <div class="pro-details-cart">
-                                <button onclick="location.href='/AddCart?ProductId='+'<%=locals.SingleProductData._id %>'" class="add-cart btn btn-primary btn-hover-primary ml-4" href="#"> Add To
+                                
+                                <button  onclick="location.href='/AddCart?ProductId='+'<%=locals.SingleProductData._id %>'" class="add-cart btn btn-primary btn-hover-primary ml-4" href="#"> Add To
                                     Cart</button>
                             </div>
+                            <!-- <div class="pro-details-cart">
+                                <button onclick="addtocart()" class="add-cart btn btn-primary btn-hover-primary ml-4" href="#"> Add To
+                                    Cart</button>
+                            </div>
+                        -->
                         </div>
                         <div class="pro-details-wish-com">
                             <div class="pro-details-wishlist">
@@ -792,6 +798,7 @@
     </div>
     <!-- Modal end -->
 
+    <script src="assets/js/userajax.js"></script>
 
 
 

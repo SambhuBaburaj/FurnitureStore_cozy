@@ -32,7 +32,7 @@ router.get("/My-account",UserHelper.SessionCheck,(req, res) => {
 router.post("/Create-account", UserHelper.New_user, (req, res) => {});
 
 router.post("/login", UserHelper.Login,(req,res)=>
-{
+{ 
 
 })
 
@@ -78,10 +78,14 @@ router.get("/ProductSingle",ProductHelper.ViewSingle,(req,res)=>
 })
 
 
+// cart Area..........................................
 
 router.get("/AddCart",(req,res,next)=>//must add session check
 {
+
+
   return new Promise(async (resolve, reject) => {
+    req.session.user="sambhubaburaj007@gmail.com"
 
 if(!req.session.user) 
 {
@@ -90,34 +94,31 @@ if(!req.session.user)
 else
 (
   next()
-)
+)   
+
   }) 
 
-},ProductHelper.AddToCart,async(req,res)=>
-{
-  const UserId=await MongoUserData.findOne({email:req.session.user});
+},ProductHelper.AddToCart,ProductHelper.ProductPost
+) 
+ router.post("/CountControl",ProductHelper.QuantityControl,(req,res)=>
+ {
+ })
 
-cartDetails=await MongoCart.findOne({UserId:UserId._id})
-// console.log(cartDetails.product);
-const ProductId=cartDetails.product;
-// console.log(ProductId);
+ router.post("/RemoveProduct",ProductHelper.RemoveProduct,(req,res)=>
+ {
 
-// const Products=[]
-// ProductId.forEach(async function  (product)
-// {
-// // console.log(product.ItemId);
-// products=await ProductStore.find({_id:product.ItemId})
+ })
 
-// console.log(Products);
-// })
+ router.get("/ClearCart",ProductHelper.ClearCart,(req,res)=>
+ {
 
-// const a=await MongoCart.aggregate([{$lookup:{from:'ProductDetails',localField:'product.ItemId'.ItemId,foreignField:'_id',as:'cate'}}])
+ })
 
-// console.log(a);
-// MongoCart.find({$and:{UserId:}})
-  res.render("user/Cart",{Category:await CategoryList(),CartItem:"k"})
-}
-)
- 
+
+
+ router.get("/CheckOut",ProductHelper.CheckOut,(req,res)=>
+ {
+
+ })
 
 module.exports = router   

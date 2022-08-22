@@ -24,10 +24,15 @@ require("dotenv").config();
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
-
+app.use((req,res,next)=>
+{
+ 
+  next()
+})
 
 
 app.use((req, res, next) => { 
+
   if (!req.user) {
     res.header("cache-control", "private,no-cache,no-store,must revalidate");
     res.header("Express", "-3");

@@ -4,6 +4,8 @@ const session = require("express-session");
 // const { MainCategory } = require("../Connections/AdminSchema");
 const UserHelper = require("../Helper-User/UserRegister_helper");
 const { response } = require("express");
+const { ObjectId } = require("mongodb");
+const { json } = require("body-parser");
 const ProductStore=require("../Connections/AdminSchema").Products
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
@@ -57,13 +59,26 @@ NewPrice=Math.trunc(SingleProductData.Price-(SingleProductData.Price*SingleProdu
 }
 
 
+
+
+// Cart Area......................................................................................................
+
 const AddToCart= async(req,res,next)=>
 {
 //  console.log(req.query.ProductId);
 //  console.log(req.session.user);
+if(!req.query.ProductId)
+{
+  next()
+}
+else{
+
 const User=await mongoConnection.user_data.findOne({email:req.session.user})
 const CartUser=await MongoCart.findOne({UserId:User._id})
-const CartData={ItemId:req.query.ProductId, Quantity:1}
+// console.log("object id is here",User._id);
+const FindProduct= await ProductStore.findOne({_id:req.query.ProductId})
+// console.log("findproduct",FindProduct._id);
+const CartData={ItemId:FindProduct._id, Quantity:1}
 if(!CartUser){
 
     const Cart_Schema = new mongoConnection.CartData({
@@ -74,6 +89,7 @@ if(!CartUser){
     Cart_Schema.save();
 
 console.log(await MongoCart.find({UserId:User._id}));
+
     MongoCart.findOneAndUpdate({UserId:User._id }, { $push: { product: CartData  } }, function (error, success) {
         if (error) {
             console.log(error);
@@ -87,7 +103,7 @@ console.log(await MongoCart.find({UserId:User._id}));
 }
 else{
 const UserIdData=CartUser.product.ItemId
-console.log(UserIdData,"here"); 
+// console.log(UserIdData,"here"); 
  
 
 
@@ -106,9 +122,9 @@ else
 
     MongoCart.findOneAndUpdate({UserId:CartUser.UserId }, { $push: { product: CartData  } }, function (error, success) {
         if (error) {
-            // console.log(error);
+            console.log(error);
         } else {
-            // console.log(success);
+   
         }
     });
     // res.render("user/Cart",{Category:await CategoryList(),CartItem:UserIdData})
@@ -120,31 +136,96 @@ else
 // res.render("user/Cart",{Category:await CategoryList(),CartItem:UserIdData})
 next()
 }
-// person.friends.push(friend);
-// person.save(done);
-
-// const CartItem = new mongoConnection.CartData({ 
-
-//     ItemId:"ytfyt" 
-
-
-// }); 
-// CartItem.save()
-
-
-
-// res.render("user/Cart",{Category:await CategoryList()})
-
- 
-// console.log(User);
 
 
    
 }
+}
+}
+
+ const ProductPost=async(req,res)=>
+ {
+   const UserId=await MongoUserData.findOne({email:req.session.user});
+
+   
+ // console.log(UserId._id);
+ cartDetails=await MongoCart.findOne({UserId:UserId._id})
+ 
+ 
+//  const ProductId=cartDetails.product;
+//  const MatchCartUserId=await MongoCart.aggregate([{$match:{UserId:UserId._id}}])
+ 
+ 
+ const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+ Quantity:'$product.Quantity'}}, {
+   $lookup:{
+       from:'productdetails',
+       localField:'ItemId', 
+       foreignField:'_id',
+       as:'product'
+   }}, {$project:{
+     ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+ }}])
+//  console.log(CartProduct);
+   res.render("user/Cart",{Category:await CategoryList(),CartItem:CartProduct})
+ } 
+
+//  quantity control.................
+const QuantityControl=async(req,res)=>
+{
+    console.log(req.body);
+const userObject=req.body.UserObject
+const Quantity=req.body.Quantity
+const ProductId=req.body.productId
+const Count=req.body.count
+// console.log(userObject);
+console.log(Count);
+await MongoCart.updateOne({_id:ObjectId(userObject),'product.ItemId':ObjectId(ProductId)},{$inc:{'product.$.Quantity':Count}})
+// const a=await MongoCart.aggregate([{$match:{_id:ObjectId(userObject)}},{$unwind:'$product'},{$project:{Product:'$product.ItemId',Quantity:'$product.Quantity'}},{$match:{Product:ObjectId(ProductId)}},{$inc:{Quantit':Count}}])
+
+res.json(true)
+
+ 
+}
+const RemoveProduct=async(req,res)=>
+{
+const UserObject=req.body.UserObject
+
+const product=req.body.productId
+
+// console.log(await MongoCart.find({_id:ObjectId(UserObject)},{'product':{ItemId:ObjectId(product)}}));
+
+MongoCart.updateOne({_id:ObjectId(UserObject)},{$pull:{'product':{ItemId:ObjectId(product)}}}, function (error, success) {
+    if (error) {
+        console.log(error);
+    } else {
+console.log(success);
+    }})
+res.json(true)
 
 }
 
- 
+const ClearCart=async(req,res)=>
+{
+
+   const Useremail=req.session.user;
+   const UserId=await mongoConnection.user_data.findOne({email:Useremail})
+   console.log(UserId._id);
+   console.log(await MongoCart.findOne({UserId:UserId._id}));
+   await MongoCart.deleteOne({UserId:UserId._id}, function (error, success) {
+    if (error) {
+        console.log(error);
+    } else {
+console.log(success);
+    }}).clone()
+res.redirect("/AddCart")
+}
+const CheckOut=(req,res)=>
+{
+
+
+    
+}
 
  
 
@@ -152,5 +233,10 @@ module.exports={
     GetProduct,
     getCategory,
     ViewSingle,
-    AddToCart
+    AddToCart,
+    ProductPost,
+    QuantityControl,
+    RemoveProduct,
+    ClearCart,
+    CheckOut
 }

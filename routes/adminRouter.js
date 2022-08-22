@@ -23,7 +23,7 @@ router.get("/", AdminHelper.SessionCheck, function (req, res) {
   res.render("admin/AdminHome", { title: "Express" }); //log out success need to be added
 });
 
-
+ 
 
 router.post("/Login", AdminHelper.AdminLogin);
 

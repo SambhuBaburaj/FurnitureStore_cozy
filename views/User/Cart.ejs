@@ -29,12 +29,15 @@
     <!-- breadcrumb-area end -->
 
     <!-- Cart Area Start -->
+   
     <div class="cart-main-area pt-100px pb-100px">
+         <%  if(locals.CartItem[0]) 
+                         { %>
         <div class="container">
             <h3 class="cart-page-title">Your cart items</h3>
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                    <form action="#">
+                    
                         <div class="table-content table-responsive cart-table-content">
                             <table>
                                 <thead>
@@ -51,63 +54,51 @@
 
 
 
+                                    <% let TotalPrice=0 %>
+                                    <% let totalQ=0,Price=0 %>
 
-                                  
+                                 
+                      
+
+                                    <%  locals.CartItem.forEach(function (CartItems) { %>   
+                                   
+                                    <tr>
+
                                     
-                                            <tr>
+
                                         <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-3" src="assets/images/product-image/1.jpg" alt="" /></a>
+                                            <a href="#"><img class="img-responsive ml-3" src="/AdminAssets/images/addProduct/<%= CartItems.product.Images[0] %> " alt="" /></a>
                                         </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$60.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                        <td class="product-name"><%= CartItems.product.ProductName%><a href="#"></a></td>
+                                        <td class="product-price-cart"><p>₹<%= CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)%></p><span class="amount"><del style="color:grey">₹<%= CartItems.product.Price%></del></span><p style="color: rgb(29, 247, 29);"><%= CartItems.product.Discount%>% Off</p></td>
+                                        <td class="product">
+                                
+                                            <div class="d-flex">
+                                                <button style="  border-style: solid;
+                                                border-width: thin;" onclick="cartcontrol('<%=CartItems._id %>','<%=CartItems.Quantity %> ','<%=CartItems.ItemId %>',-1)"  class="col-lg-3 btn-outline-info" >-</button>
+                                                <input id="quantitynumber" readonly type="text" value="<%=CartItems.Quantity %> "> 
+                                                <button style="  border-style: solid;
+                                                border-width: thin;" onclick="cartcontrol('<%=CartItems._id %>','<%=CartItems.Quantity %> ','<%=CartItems.ItemId %>',1)" class="col-lg-3 btn-outline-info">+</button>
+                                           
                                             </div>
                                         </td>
-                                        <td class="product-subtotal">$70.00</td>
+                                      
+                                        <td class="product-subtotal"><p>₹<%=CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100) %></p><p style="font-size: 14px;">you save <br>₹<%= (CartItems.product.Price*CartItems.product.Discount/100)*CartItems.Quantity %> </p> </td>
                                         <td class="product-remove">
-                                            <a href="#"><i class="icon-pencil"></i></a>
-                                            <a href="#"><i class="icon-close"></i></a>
-                                        </td>
-                                    </tr>
+
+                                         
+                                           <% TotalPrice=TotalPrice+CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)%>
+                                           <% totalQ=totalQ+CartItems.Quantity%>
+                                            <% Price=Price+(CartItems.Quantity* CartItems.product.Price) %> 
 
 
 
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-3" src="assets/images/product-image/2.jpg" alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$50.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$80.00</td>
-                                        <td class="product-remove">
-                                            <a href="#"><i class="icon-pencil"></i></a>
-                                            <a href="#"><i class="icon-close"></i></a>
+                                            <a onclick="RemoveProduct('<%=CartItems._id %>','<%=CartItems.ItemId %>')"  href="#"><i class="icon-close"></i></a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-3" src="assets/images/product-image/3.jpg" alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$70.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$90.00</td>
-                                        <td class="product-remove">
-                                            <a href="#"><i class="icon-pencil"></i></a>
-                                            <a href="#"><i class="icon-close"></i></a>
-                                        </td>
-                                    </tr>
+                                    
+                                    <% })%>
+                                
                                 </tbody>
                             </table>
                         </div>
@@ -119,12 +110,12 @@
                                     </div>
                                     <div class="cart-clear">
                                         <button>Update Shopping Cart</button>
-                                        <a href="#">Clear Shopping Cart</a>
+                                        <a href="/ClearCart">Clear Shopping Cart</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
+             
                     <div class="row">
                         <div class="col-lg-4 col-md-6 mb-lm-30px">
                             <div class="cart-tax">
@@ -188,23 +179,51 @@
                                 <div class="title-wrap">
                                     <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                 </div>
-                                <h5>Total products <span>$260.00</span></h5>
+                                <h5>Total products <span><%= totalQ %></span></h5>
+                                <h5>Total Price <span>₹ <%= Price %> </span></h5>
+                           
                                 <div class="total-shipping">
-                                    <h5>Total shipping</h5>
+                                    <h5>Additional charges</h5>
                                     <ul>
-                                        <li><input type="checkbox" /> Standard <span>$20.00</span></li>
-                                        <li><input type="checkbox" /> Express <span>$30.00</span></li>
+                                        <li><input style="color: black;" readonly type="" /> delivery fee <span style="color: rgb(5, 255, 5);">Free</span></li>
+               
                                     </ul>
                                 </div>
-                                <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
-                                <a href="checkout.html">Proceed to Checkout</a>
+                                <h4 class="grand-totall-title">Grand Total <span>₹<%= Math.trunc(TotalPrice)  %></span></h4>
+                                <a href="/CheckOut">Proceed to Checkout</a>
                             </div>
-                        </div>
+                            <% } else { %>
+                               
+    <!-- Cart area start -->
+    <div class="empty-cart-area pb-100px pt-100px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="cart-heading">
+                        <h2>Your cart item</h2>
+                    </div>
+                    <div class="empty-text-contant text-center">
+                        <i class="icon-handbag"></i>
+                        <h1>There are no more items in your cart</h1>
+                        <a class="empty-cart-btn" href="shop-4-column.html">
+                            <i class="ion-ios-arrow-left"> </i> Continue shopping
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Cart area end -->
+                        <% } %>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+    </div>
+ 
     <!-- Cart Area End -->
 
     <!-- Footer Area Start -->
@@ -212,7 +231,7 @@
     <!-- Footer Area End -->
 
 
-
+<script src="assets/js/userajax.js"></script>
 
 
 
