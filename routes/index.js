@@ -8,6 +8,16 @@ const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
 const ProductStore=require("../Connections/AdminSchema").Products
 /* GET home page. */
+
+
+router.use((req, res, next) => {
+
+  req.session.user="sambhubaburaj007@gmail.com"
+  next()
+ })
+
+
+
 const CategoryList=async()=>
 
 {
@@ -34,6 +44,11 @@ router.post("/Create-account", UserHelper.New_user, (req, res) => {});
 router.post("/login", UserHelper.Login,(req,res)=>
 { 
 
+})
+
+router.get("/headline",(req,res)=>
+{
+  res.redirect("/")
 })
 
 router.get("/UserLogout",UserHelper.Logout,async(req,res)=>
@@ -85,7 +100,7 @@ router.get("/AddCart",(req,res,next)=>//must add session check
 
 
   return new Promise(async (resolve, reject) => {
-    req.session.user="sambhubaburaj007@gmail.com"
+    // req.session.user="sambhubaburaj007@gmail.com"
 
 if(!req.session.user) 
 {
@@ -116,9 +131,22 @@ else
 
 
 
- router.get("/CheckOut",ProductHelper.CheckOut,(req,res)=>
+ router.get("/CheckOut",(req,res,next)=>
+
  {
 
- })
+  next()
+  
+ },ProductHelper.CheckOut
+ )
+router.post("/OrderCheckout",ProductHelper.OrderCheckout,(req,res)=>
+{
+
+
+
+
+})
+router.get("/YourOrders")
+
 
 module.exports = router   

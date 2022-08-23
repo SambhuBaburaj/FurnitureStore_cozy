@@ -23,7 +23,23 @@ product:[{
 
 })
 const CartData=mongoose.model("CartData",Cart_Schema)
- 
 
+const order_schema=new mongoose.Schema({
 
-module.exports = {user_data,CartData}
+  
+  DeliveryDetails:{
+    type:Object
+  },
+  
+  paymentMethod:String,
+  date:Date,
+  realDate:Date,
+  products:Array 
+,
+  userId:mongoose.ObjectId,
+  TotalAmount:Number,
+  Status:String
+  })
+  const OrderDetails=mongoose.model("OrderDetails",order_schema)
+  
+  module.exports = {user_data,CartData,OrderDetails}

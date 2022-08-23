@@ -220,14 +220,126 @@ console.log(success);
     }}).clone()
 res.redirect("/AddCart")
 }
-const CheckOut=(req,res)=>
+
+const CheckOut=async(req,res)=>
+{
+    // console.log(req.session.user);
+    const UserId=await MongoUserData.findOne({email:req.session.user});
+    cartDetails=await MongoCart.findOne({UserId:UserId._id})
+    
+     
+ const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+ Quantity:'$product.Quantity'}}, {
+   $lookup:{
+       from:'productdetails',
+       localField:'ItemId', 
+       foreignField:'_id',
+       as:'product'
+   }}, {$project:{
+     ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+ }}])
+
+let quantity=0,TotalPrice=0,Price=0,Discount=0;
+
+
+
+
+ CartProduct.forEach(function (CartItems)
+ {
+
+    quantity=quantity+CartItems.Quantity;
+    TotalPrice=TotalPrice+CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)
+    Discount=Discount+CartItems.Quantity*(CartItems.product.Price*CartItems.product.Discount/100)
+    Price=Price+(CartItems.Quantity* CartItems.product.Price)
+})
+// console.log(Math.trunc(Price));
+//     console.log( Math.trunc(TotalPrice));
+//     console.log("sdi",Discount);
+
+const CheckoutData={
+RealPrice:Math.trunc(Price),
+DisPrice:Math.trunc(TotalPrice),
+Quantity: Math.trunc(quantity),
+Discount:Math.trunc(Discount)
+}
+
+if(quantity==0)
+{
+    res.redirect("/")
+}
+else
+{
+    res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData})
+}
+} 
+
+
+
+
+
+
+
+
+const OrderCheckout= async(req,res)=>
 {
 
 
-    
+
+
+// console.log(user);
+
+const details = req.body
+console.log(details);
+const Address={
+Name:details.FirstName+" "+details.LastName,
+Mobile:details.phone,
+Email:details.email,
+Address:details.Address,
+Country:details.Country,
+State:details.State,
+City:details.City,
+Zip:details.zip,
+additional:details.additional 
 }
 
+const user=await mongoConnection.user_data.findOne({email:req.session.user})
+// console.log(user._id);
+// console.log(await MongoCart.find({UserId:user._id}));
+
+// console.log(Address);
+const ProductData=await MongoCart.aggregate([{$match:{UserId:user._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+Quantity:'$product.Quantity',_id:0}}])
+if(details.delivery=="COD")
+{
+console.log('heree');
+
+const OrderDetails = new mongoConnection.OrderDetails({
+ DeliveryDetails:Address, 
  
+ userId:user._id,
+date:new Date().toDateString(),
+realDate:new Date(),
+products:ProductData,
+status:"Order Placed",
+PaymentMethode:details.delivery
+
+})
+OrderDetails.save()
+
+await MongoCart.deleteOne({UserId:user._id}, function (error, success) {
+    if (error) {
+        console.log(error);
+    } else {
+console.log(success);
+    }}).clone()
+res.render("user/OrderPlaced",{Category:await CategoryList()});
+
+}
+
+
+}
+
+  
 
 module.exports={
     GetProduct,
@@ -238,5 +350,6 @@ module.exports={
     QuantityControl,
     RemoveProduct,
     ClearCart,
-    CheckOut
-}
+    CheckOut,
+    OrderCheckout
+}  
