@@ -29,7 +29,7 @@ function cartcontrol(UserObject, Quantity, productId, count) {
   event.preventDefault();
   console.log(Number(Quantity) + Number(count));
   if (Number(Quantity) + Number(count) == 0) {
-    alert("canot be done");
+    swal("canot be done!");
   } else {
     console.log(UserObject, Quantity, productId, count);
     $.ajax({

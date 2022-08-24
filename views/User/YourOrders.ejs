@@ -1,0 +1,142 @@
+<%- include('partials/header') %>
+
+
+
+
+
+
+
+
+<div class="card-body">
+    <div class="row mb-50 mt-20 order-info-wrap">
+        <div class="col-md-4">
+            <article class="icontext align-items-start">
+                <span class="icon icon-sm rounded-circle bg-primary-light">
+                    <i class="text-primary material-icons md-person"></i>
+                </span>
+                <div class="text">
+                    <h6 class="mb-1">Customer</h6>
+                  <span>Name:</span>  <p class="mb-1">
+                      <%= locals.orderDetails.DeliveryDetails.Name%> <br> <template class="__cf_email__" data-cfemail="e2838e879aa2879a838f928e87cc818d8f">[email&nbsp;protected]</template> <span>Phone:</span><br>  <%= locals.orderDetails.DeliveryDetails.Mobile%> 
+                    </p>
+                    <a href="#">View profile</a>
+                </div>
+            </article>
+        </div> <!-- col// -->
+        <div class="col-md-4">
+            <article class="icontext align-items-start">
+                <span class="icon icon-sm rounded-circle bg-primary-light">
+                    <i class="text-primary material-icons md-local_shipping"></i>
+                </span>
+                <div class="text">
+                    <h6 class="mb-1">Order info</h6>
+                    <p class="mb-1">
+                        Shipping: Fargo express <br> Pay method: <%= locals.orderDetails.paymentMethod%> <br>Delivery Status: <%= locals.orderDetails.DeliveryStatus%> 
+                    </p>
+                    <a href="#">Download info</a>
+                </div>
+            </article>
+        </div> <!-- col// -->
+        <div class="col-md-4">
+            <article class="icontext align-items-start">
+                <span class="icon icon-sm rounded-circle bg-primary-light">
+                    <i class="text-primary material-icons md-place"></i>
+                </span>
+                <div class="text">
+                    <h6 class="mb-1">Deliver to</h6>
+                    <p class="mb-1">
+                        <%= locals.orderDetails.DeliveryDetails.Address%><br>
+                        <%= locals.orderDetails.DeliveryDetails.City%>
+                        ,<%= locals.orderDetails.DeliveryDetails.State%>
+                        <br> <%= locals.orderDetails.DeliveryDetails.Zip%>
+                    </p>
+                    <a href="#">View profile</a>
+                </div>
+            </article>
+        </div> <!-- col// -->
+    </div> <!-- row // -->
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="40%">Product</th>
+                            <th width="20%">Unit Price</th>
+                            <th width="20%">Quantity</th>
+                            <th class="text-end" width="20%">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% locals.productdata.forEach((element)=> { %>
+                                    <tr>
+                            <td>
+                                <a class="itemside" href="/ProductSingle?id=<%=element.product._id%>">
+                                    <div class="left">
+                                        </div>
+                                    <div class="info">₹ <%=element.product.ProductName%> </div>
+                                </a>
+                            </td>
+                               <td>₹ <%=Math.trunc( element.product.Price-(element.product.Price*element.product.Discount/100))%>  </td>
+                            <td class="text-end"> <%=element.Quantity%></td>
+                            <td class="text-end">₹ <%=Math.trunc( element.product.Price-(element.product.Price*element.product.Discount/100))*element.Quantity%>  </td>
+                        </tr>
+                        
+ 
+
+
+
+                      <%  }) %> 
+
+
+
+                        
+                       
+                        <tr>
+                            <td colspan="4">
+                                <article class="float-end">
+                                    <dl class="dlist">
+                                        <dt>Subtotal:</dt>
+                                        <dd>₹ <%=orderDetails.TotalAmount%></dd>
+                                    </dl>
+                                    <dl class="dlist">
+                                        <dt>Shipping cost:</dt>
+                                        <dd>₹ 0.00</dd>
+                                    </dl>
+                                    <dl class="dlist">
+                                        <dt>Grand total:</dt>
+                                        <dd> <b class="h5">₹ <%=orderDetails.TotalAmount%></b> </dd>
+                                    </dl>
+                                    <dl class="dlist">
+                                        <dt class="text-muted">Status:</dt>
+                                        <dd>
+                                            <span class="badge rounded-pill alert-warning text-success"><%=orderDetails.PaymentStatus%></span>
+                                        </dd>
+                                    </dl>
+                                </article>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> <!-- table-responsive// -->
+        </div> <!-- col// -->
+        <div class="col-lg-1"></div>
+  <!-- col// -->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<%- include('partials/footer') %>
+<script src="assets/js/vendor/vendor.min.js"></script>
+<script src="assets/js/plugins/plugins.min.js"></script>
+
+<!-- Main Js -->
+<script src="assets/js/main.js"></script>

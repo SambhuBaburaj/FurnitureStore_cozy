@@ -35,10 +35,11 @@ const order_schema=new mongoose.Schema({
   date:Date,
   realDate:Date,
   products:Array 
-,
+,  DeliveryStatus:String,
+PaymentStatus:String,
   userId:mongoose.ObjectId,
   TotalAmount:Number,
-  Status:String
+
   })
   const OrderDetails=mongoose.model("OrderDetails",order_schema)
   

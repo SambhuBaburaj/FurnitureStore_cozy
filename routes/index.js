@@ -2,27 +2,29 @@ const { response } = require("express");
 var express = require("express");
 var router = express.Router();
 const UserHelper = require("../Helper-User/UserRegister_helper");
-ProductHelper=require("../Helper-User/Home-helper")
-MongoUserData=require("../Connections/UserSchema").user_data
+const ProductHelper=require("../Helper-User/Home-helper")
+const ProfileHelper=require("../Helper-User/ProfileHelper")
+const MongoUserData=require("../Connections/UserSchema").user_data
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
 const ProductStore=require("../Connections/AdminSchema").Products
 /* GET home page. */
 
 
-router.use((req, res, next) => {
+// router.use((req, res, next) => {
 
-  req.session.user="sambhubaburaj007@gmail.com"
-  next()
- })
+//   req.session.user="sambhubaburaj007@gmail.com"
+//   next()
+
+//  })
 
 
 
-const CategoryList=async()=>
+ const CategoryList=async()=>
 
-{
-   return await MongoCategory.find()
-}
+ {
+    return await MongoCategory.find()
+ }
 
 
 
@@ -35,9 +37,7 @@ router.get("/UserLogin",UserHelper.LoginSession, (req, res) => {
   res.render("user/User-login",{Category:CategoryList});
 });
  
-router.get("/My-account",UserHelper.SessionCheck,(req, res) => { 
-  res.render("user/User-profile",{Category:CategoryList});
-});
+
 
 router.post("/Create-account", UserHelper.New_user, (req, res) => {});
 
@@ -146,7 +146,20 @@ router.post("/OrderCheckout",ProductHelper.OrderCheckout,(req,res)=>
 
 
 })
-router.get("/YourOrders")
+router.get("/YourOrders",ProfileHelper.SingleOrder,async(req,res)=>
+{
+
+  // console.log(req.query,"f7fgf");
+
+})
+
+
+router.get("/My-account",UserHelper.SessionCheck,ProfileHelper.MainProfile,(req, res) => { 
+
+
+
+});
+
 
 
 module.exports = router   

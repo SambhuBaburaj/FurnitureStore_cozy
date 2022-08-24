@@ -6,10 +6,11 @@ const UserHelper = require("../Helper-User/UserRegister_helper");
 const { response } = require("express");
 const { ObjectId } = require("mongodb");
 const { json } = require("body-parser");
+const { TrustProductsChannelEndpointAssignmentContext } = require("twilio/lib/rest/trusthub/v1/trustProducts/trustProductsChannelEndpointAssignment");
 const ProductStore=require("../Connections/AdminSchema").Products
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
-
+const MongoUserData=require("../Connections/UserSchema").user_data
 /* GET home page. */
 // const CategoryList=MongoCategory.find()
 
@@ -145,6 +146,9 @@ next()
 
  const ProductPost=async(req,res)=>
  {
+
+    console.log(req.session);
+    
    const UserId=await MongoUserData.findOne({email:req.session.user});
 
    
@@ -282,6 +286,33 @@ else
 
 const OrderCheckout= async(req,res)=>
 {
+    const UserId=await MongoUserData.findOne({email:req.session.user});
+    cartDetails=await MongoCart.findOne({UserId:UserId._id})
+
+     
+    var CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+    Quantity:'$product.Quantity'}}, {
+      $lookup:{
+          from:'productdetails',
+          localField:'ItemId', 
+          foreignField:'_id',
+          as:'product'
+      }}, {$project:{
+        ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+    }}])
+   
+    let TotalPrice=0
+
+
+
+    CartProduct.forEach(function (CartItems)
+    {
+   
+
+       TotalPrice=TotalPrice+CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)
+      
+   })
+
 
 
 
@@ -300,6 +331,8 @@ State:details.State,
 City:details.City,
 Zip:details.zip,
 additional:details.additional 
+
+
 }
 
 const user=await mongoConnection.user_data.findOne({email:req.session.user})
@@ -321,18 +354,27 @@ date:new Date().toDateString(),
 realDate:new Date(),
 products:ProductData,
 status:"Order Placed",
-PaymentMethode:details.delivery
+PaymentMethode:details.delivery,
+PaymentStatus:"pending",
+DeliveryStatus:"pending",
+TotalAmount:Math.trunc(TotalPrice),
+paymentMethod:"COD"
 
 })
-OrderDetails.save()
+OrderDetails.save(function(err,room){
+    var newRoomId = room._id;
 
+    console.log("room",newRoomId);
+    })
+
+ 
 await MongoCart.deleteOne({UserId:user._id}, function (error, success) {
     if (error) {
         console.log(error);
     } else {
 console.log(success);
     }}).clone()
-res.render("user/OrderPlaced",{Category:await CategoryList()});
+res.render("user/OrderPlaced",{Category:await CategoryList() ,orderID:OrderDetails._id});
 
 }
 

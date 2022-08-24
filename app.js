@@ -63,6 +63,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use("assets", express.static(path.join(__dirname, "public/assets")));
+app.use("/userassets", express.static(path.join(__dirname, "public/accountassets")));
 app.use("/assetsAdmin", express.static(path.join(__dirname, "public/AdminAssets")));
 app.use("/plugins", express.static(path.join(__dirname, "public/AdminAssets/plugins")));
 app.use('/', indexRouter);
