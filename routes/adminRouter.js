@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const AdminCategory=require("../Helper-Admin/CategoryManagement")
 const AdminHelper = require("../Helper-Admin/AdminLogin");
+const ProductManagement = require("../Helper-Admin/ProductManagement");
 const multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -83,6 +84,12 @@ next()
 },AdminCategory.productadd
 )
 
+
+router.get("/ViewProducts",(req,res,next)=>
+{
+next()
+},ProductManagement.ViewProducts
+)
 
 module.exports = router;
  

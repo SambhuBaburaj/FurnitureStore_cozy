@@ -83,11 +83,11 @@
                                             </div>
                                         </td>
                                       
-                                        <td class="product-subtotal"><p>₹<%=CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100) %></p><p style="font-size: 14px;">you save <br>₹<%= (CartItems.product.Price*CartItems.product.Discount/100)*CartItems.Quantity %> </p> </td>
+                                        <td class="product-subtotal"><p>₹<%=CartItems.Quantity* (CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)) %></p><p style="font-size: 14px;">you save <br>₹<%= (CartItems.product.Price*CartItems.product.Discount/100)*CartItems.Quantity %> </p> </td>
                                         <td class="product-remove">
 
                                          
-                                           <% TotalPrice=TotalPrice+CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)%>
+                                           <% TotalPrice=TotalPrice+(CartItems.Quantity* (CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)))%>
                                            <% totalQ=totalQ+CartItems.Quantity%>
                                             <% Price=Price+(CartItems.Quantity* CartItems.product.Price) %> 
 
@@ -191,7 +191,15 @@
                                 </div>
                                 <h4 class="grand-totall-title">Grand Total <span>₹<%= Math.trunc(TotalPrice)  %></span></h4>
                                 <a href="/CheckOut">Proceed to Checkout</a>
+
+
+
+
+
+
+
                             </div>
+
                             <% } else { %>
                                
     <!-- Cart area start -->

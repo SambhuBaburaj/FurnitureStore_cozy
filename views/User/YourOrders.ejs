@@ -1,6 +1,17 @@
 <%- include('partials/header') %>
 
-
+<style>
+    .btn-primary {
+    color: #fff;
+    background-color: #ff7d0b;
+    border-color: #357ebd; /*set the color you want here*/
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #ff0000;
+    border-color: #285e8e; /*set the color you want here*/
+}
+</style>
 
 
 
@@ -37,7 +48,7 @@
                 </div>
             </article>
         </div> <!-- col// -->
-        <div class="col-md-4">
+        <div class="col-md-2">
             <article class="icontext align-items-start">
                 <span class="icon icon-sm rounded-circle bg-primary-light">
                     <i class="text-primary material-icons md-place"></i>
@@ -50,10 +61,21 @@
                         ,<%= locals.orderDetails.DeliveryDetails.State%>
                         <br> <%= locals.orderDetails.DeliveryDetails.Zip%>
                     </p>
-                    <a href="#">View profile</a>
+                    
                 </div>
             </article>
         </div> <!-- col// -->
+        <div class="col-md-2" >
+            <% console.log(  locals.orderDetails.CancelOrder); %> 
+            <% if(  locals.orderDetails.CancelOrder ==0 ) {  %> 
+            <button onclick="CancelOrder('<%=locals.orderDetails._id %>')" id="btn-primary" class="btn-primary btn-lg" >Cancel Order</button> 
+        <% }else { %>
+            
+            <button class="btn btn-secondary" disabled >canceled</button> 
+    
+
+            <% } %> 
+        </div>
     </div> <!-- row // -->
     <div class="row">
         <div class="col-lg-7">
@@ -110,6 +132,8 @@
                                     <dl class="dlist">
                                         <dt class="text-muted">Status:</dt>
                                         <dd>
+                                            
+                                        
                                             <span class="badge rounded-pill alert-warning text-success"><%=orderDetails.PaymentStatus%></span>
                                         </dd>
                                     </dl>
@@ -135,6 +159,7 @@
 
 
 <%- include('partials/footer') %>
+<script src="assets/js/userajax.js"></script>
 <script src="assets/js/vendor/vendor.min.js"></script>
 <script src="assets/js/plugins/plugins.min.js"></script>
 

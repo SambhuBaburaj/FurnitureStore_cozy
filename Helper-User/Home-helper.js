@@ -11,6 +11,7 @@ const ProductStore=require("../Connections/AdminSchema").Products
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
 const MongoUserData=require("../Connections/UserSchema").user_data
+const MongoAddress=require("../Connections/UserSchema").address
 /* GET home page. */
 // const CategoryList=MongoCategory.find()
 
@@ -252,9 +253,10 @@ let quantity=0,TotalPrice=0,Price=0,Discount=0;
  {
 
     quantity=quantity+CartItems.Quantity;
-    TotalPrice=TotalPrice+CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)
+  
     Discount=Discount+CartItems.Quantity*(CartItems.product.Price*CartItems.product.Discount/100)
     Price=Price+(CartItems.Quantity* CartItems.product.Price)
+    TotalPrice=TotalPrice+(Price-Discount)
 })
 // console.log(Math.trunc(Price));
 //     console.log( Math.trunc(TotalPrice));
@@ -265,7 +267,14 @@ RealPrice:Math.trunc(Price),
 DisPrice:Math.trunc(TotalPrice),
 Quantity: Math.trunc(quantity),
 Discount:Math.trunc(Discount)
+
+
 }
+const user=await MongoUserData.findOne({email:req.session.user})
+const address=await MongoAddress.find({userID:user.id})
+
+
+console.log(address);
 
 if(quantity==0)
 {
@@ -273,7 +282,7 @@ if(quantity==0)
 }
 else
 {
-    res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData})
+    res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData,address:address})
 }
 } 
 
@@ -309,7 +318,7 @@ const OrderCheckout= async(req,res)=>
     {
    
 
-       TotalPrice=TotalPrice+CartItems.Quantity* CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)
+       TotalPrice=TotalPrice+(CartItems.Quantity*( CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)))
       
    })
 
@@ -358,8 +367,8 @@ PaymentMethode:details.delivery,
 PaymentStatus:"pending",
 DeliveryStatus:"pending",
 TotalAmount:Math.trunc(TotalPrice),
-paymentMethod:"COD"
-
+paymentMethod:"COD",
+CancelOrder:0
 })
 OrderDetails.save(function(err,room){
     var newRoomId = room._id;

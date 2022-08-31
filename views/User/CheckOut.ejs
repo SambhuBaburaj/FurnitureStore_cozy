@@ -256,7 +256,7 @@
     <!-- breadcrumb-area end -->
 
     <!-- checkout area start -->
-    <form id="myform" action="/OrderCheckout" method="post">
+    <form id="placeOrder" action="" method="">
 
 
     <div class="checkout-area pt-100px pb-100px">
@@ -269,26 +269,26 @@
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>First Name</label>
-                                    <input name="FirstName"  type="text" required>
+                                    <input id="firstname" name="FirstName"  type="text" required>
                                 
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>Last Name</label>
-                                    <input name="LastName" type="text" />
+                                    <input id="lastname" name="LastName" type="text" />
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="billing-info mb-4">
                                     <label>Address</label>
-                                    <input name="Address" type="text" />
+                                    <input id="address" name="Address" type="text" />
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="billing-info mb-4">
                                     <label>Country</label>
-                                    <input name="Country" type="text" />
+                                    <input id="country" name="Country" type="text" />
 
                                 </div>
                             </div>
@@ -296,31 +296,31 @@
                             <div class="col-lg-12">
                                 <div class="billing-info mb-4">
                                     <label>Town / City</label>
-                                    <input name="City"  required type="text" />
+                                    <input id="city" name="City"  required type="text" />
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>State / County</label>
-                                    <input name="State" type="text" />
+                                    <input id="state" name="State" type="text" />
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>Postcode / ZIP</label>
-                                    <input name="zip" type="text" />
+                                    <input id="postcode" name="zip" type="text" />
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>Phone</label>
-                                    <input name="phone" type="text" />
+                                    <input id="phone" name="phone" type="text" />
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>Email Address</label>
-                                    <input name="email" type="text" />
+                                    <input id="email" name="email" type="text" />
                                 </div>
                             </div>
                         </div>
@@ -328,13 +328,114 @@
                             <h4>Additional information</h4>
                             <div class="additional-info">
                                 <label>Order notes</label>
-                                <textarea name="additional"  placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
+                                <textarea id="extra" name="additional"  placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
                             </div>
+                           
                         </div>
+                   
                  
                     </div>
+                    <div  class=" row">
+                        <button id="btn-primary" class=" btn-primary btn mr-3" type="button"
+                           
+                            onclick="saveAddress(document.getElementById('firstname').value,document.getElementById('lastname').value,document.getElementById('address').value,document.getElementById('country').value,document.getElementById('city').value,document.getElementById('state').value,document.getElementById('postcode').value,document.getElementById('phone').value,document.getElementById('email').value,document.getElementById('extra').value)">save
+                            address
+                        </button>
+
+                        <button id="btn-primary" class=" btn-primary btn " type="button"
+                           
+                        onclick="clearAddress()">clear address
+                        address
+                    </button>
+
+
+                        <!-- <button id="btn-primary" class=" btn-primary btn" type="button"
+                           
+                        onclick="saveAddress(document.getElementById('firstname').value,document.getElementById('lastname').value,document.getElementById('address').value,document.getElementById('country').value,document.getElementById('state').value,document.getElementById('postcode').value,document.getElementById('zip').value,document.getElementById('phone').value,document.getElementById('email').value,document.getElementById('extra').value)">save
+                        address
+                    </button> -->
+                    
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
+
+                
                 <div class="col-lg-5 mt-md-30px mt-lm-30px ">
+
+
+
+                    <div class="row">
+                        <div class="col-md-2">&nbsp;</div>
+                        <div class="col-md-12">
+                            <div class="row space-16">&nbsp;</div>
+                            <div class="row">
+    
+    
+                                <%  locals.address.forEach((element)=>
+                                { %>
+
+                                 
+                                    <div class="col-md-4">
+                                        <div class="thumbnail">
+                                            <div class="caption text-left ">
+                                                
+                                                <input id="adradio" onclick="addadressbar('<%= element.address.firstname %>','<%= element.address.lastname %>','<%= element.address.address %>','<%= element.address.country %>','<%= element.address.city %>','<%= element.address.state %>','<%= element.address.postcode %>','<%= element.address.phone %>','<%= element.address.email %>','<%= element.address.extra %>')" style="height:50px; width:20px;" type="radio" name="address" >
+                                                <h4><%= element.address.firstname %>
+                                                </h4>
+                                            </div>
+                                            <div class="caption card-footer ml-4 ">
+                                                <ul>
+                                                    <li><%= element.address.address %></li>
+                                                    <li><%= element.address.city %></li>
+                                                    <li><%= element.address.postcode %></li>
+                                                    <li><%= element.address.phone %></li>
+                                                
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <%   }) %>
+    
+                       
+
+
+
+
+
+                                 
+
+
+
+    
+                            </div>
+                            <div class="col-md-2">&nbsp;</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
                     <div class="your-order-area">
                         <h3>Your order</h3>
                         <div class="your-order-wrap gray-bg-4">
@@ -387,13 +488,54 @@
                         <div class="Place-order mt-25">
                        <button id="btn-primary" class="btn-primary btn-lg btn-block" >Place Order</button>
                   
+
+
+
+
+                     
+
+
+                    
+
+
+
+
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     </div> 
+
+
+
+
+
+
+
+
+
+
+    
 </form>
+
+
     <!-- checkout area end -->
 
     <!-- Footer Area Start -->
@@ -402,7 +544,9 @@
     <!-- Footer Area End -->
 
 
+    <script src="assets/js/userajax.js"></script>
 
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
@@ -434,6 +578,10 @@
 
     <!-- Main Js -->
     <script src="assets/js/main.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
+
 
 </html>

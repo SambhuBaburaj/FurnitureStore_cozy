@@ -1,0 +1,112 @@
+
+<%- include('partials/Header') %>
+
+<body>
+
+  
+    <!-- header-bg -->
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="page-title-box">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <h4 class="page-title">Products</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-right">
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">Stexo</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li>
+                            <li class="breadcrumb-item active">Products</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+
+                            <h4 class="mt-0 header-title">Products and their details</h4>
+                            <p class="sub-title font-14">list of all product seen by the user.</p>
+
+                            <div class="table-rep-plugin">
+                                <div class="table-responsive b-0" data-pattern="priority-columns">
+                                    <table id="tech-companies-1" class="table  table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>Products</th>
+                                            <th data-priority="1">Category</th>
+                                            <th data-priority="3">SubCategory</th>
+                                            <th data-priority="1">Price</th>
+                                            <th data-priority="3">Discount</th>
+                                            <th data-priority="3">Desc</th>
+                                            <th data-priority="6">Images</th>
+                                      
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                    
+                                            <% locals.products.forEach(element => { %>
+                                                <tr>
+                                                  <th><%=element.ProductName  %>  </th>                                
+  <th><%=element.Category  %>  </th>
+  <th><%=element.SubCategory  %>  </th>
+  <th>₹ <%=element.Price  %>  </th>
+  <th><%=element.Discount  %>  %</th>
+  <th><%=element.Disc  %>  </th>
+
+    <th><img src="/AdminAssets/images/addProduct/<%=element.Images[0]  %>" alt="" style="height: 40px; width: 40px;">  </th>
+  
+                                                </tr>  
+  
+  
+                                        <%      });  %> 
+
+
+
+                                        
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->  
+
+        </div>
+        <!-- end container-fluid -->
+    </div>
+    <!-- end wrapper -->
+
+    <!-- Footer -->
+<%- include("partials/footer") %> 
+
+    <!-- End Footer -->
+
+    <!-- jQuery  -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/jquery.slimscroll.js"></script>
+    <script src="assets/js/waves.min.js"></script>
+
+    <!-- Responsive-table-->
+    <!-- <script src="../plugins/RWD-Table-Patterns/dist/js/rwd-table.min.js"></script> -->
+
+    <!-- App js -->
+    <script src="assets/js/app.js"></script>
+    <script>
+        $(function() {
+            $('.table-responsive').responsiveTable({
+                addDisplayAllBtn: 'btn btn-secondary'
+            });
+        });
+    </script>
+
+</body>

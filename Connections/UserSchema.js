@@ -39,8 +39,19 @@ const order_schema=new mongoose.Schema({
 PaymentStatus:String,
   userId:mongoose.ObjectId,
   TotalAmount:Number,
+  CancelOrder:Number
 
   })
   const OrderDetails=mongoose.model("OrderDetails",order_schema)
+
+const Address_schema=new mongoose.Schema({
+ 
+  UserId:mongoose.ObjectId,
+  address:{
+    type:Object
+  }
+})
+const address=mongoose.model('UserAddress',Address_schema)
+
   
-  module.exports = {user_data,CartData,OrderDetails}
+  module.exports = {user_data,CartData,OrderDetails,address}

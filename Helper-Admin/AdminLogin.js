@@ -3,7 +3,7 @@ const mongoConnection=require("../Connections/UserSchema")
 const mongoose = require("mongoose");
 const SessionCheck= (req,res,next)=>
 {
-  if(req.session.admin) {
+  if(!req.session.admin) {
    
 res.render("admin/AdminLogin",{Authentication:req.query.LoginAgain,LogoutAdmin:req.query.Logout})
 }

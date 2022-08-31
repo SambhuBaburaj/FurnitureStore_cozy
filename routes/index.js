@@ -3,20 +3,29 @@ var express = require("express");
 var router = express.Router();
 const UserHelper = require("../Helper-User/UserRegister_helper");
 const ProductHelper=require("../Helper-User/Home-helper")
+const PaymentHelper=require("../Helper-User/PaymentHelper")
 const ProfileHelper=require("../Helper-User/ProfileHelper")
 const MongoUserData=require("../Connections/UserSchema").user_data
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
 const ProductStore=require("../Connections/AdminSchema").Products
+const CC = require("currency-converter-lt");
+const paypal = require('paypal-rest-sdk');
+ 
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': 'AQVcB0br1h3w35WAI6TnvZ1YWo5tb4MAQsnPWC03HS4Ablcy6yY7M9dJ6GsWdPSFxzYv7Dzj6JZVffOb',
+  'client_secret': 'EFZcTQfiBEyN2w_p1TpChtgkakULbuHfYvGMWyUwsk8OCvACXZqo8AsCAWCPR_jTXiUHHrpPH0ooZVqo'
+});
 /* GET home page. */
 
 
-// router.use((req, res, next) => {
+router.use((req, res, next) => {
 
-//   req.session.user="sambhubaburaj007@gmail.com"
-//   next()
+  req.session.user="sambhubaburaj007@gmail.com"
+  next()
 
-//  })
+ })
 
 
 
@@ -97,7 +106,7 @@ router.get("/ProductSingle",ProductHelper.ViewSingle,(req,res)=>
 
 router.get("/AddCart",(req,res,next)=>//must add session check
 {
-
+ 
 
   return new Promise(async (resolve, reject) => {
     // req.session.user="sambhubaburaj007@gmail.com"
@@ -139,13 +148,53 @@ else
   
  },ProductHelper.CheckOut
  )
-router.post("/OrderCheckout",ProductHelper.OrderCheckout,(req,res)=>
+router.post("/OrderCheckout",PaymentHelper.OrderCheckout,(req,res)=>
 {
 
 
 
 
 })
+router.get("/CODOrderSuccess",async (req,res,next)=>
+{
+console.log(req.query,"sfiuajr");
+
+     res.render("user/OrderPlaced", {
+      Category: await CategoryList(),
+      orderID: req.query.data,
+    });
+    next()
+})
+
+
+
+
+router.get("/OrderSuccess",async (req,res,next)=>
+{
+
+  console.log(req.params.data);
+    //  res.render("user/OrderPlaced", {
+    //   Category: await CategoryList(),
+    //   orderID: OrderDetails._id,
+    // });
+    next()
+},PaymentHelper.PaypalOrderPlaced)
+
+router.get("/OrderSuccessrazer",(Req,res,next)=>
+{
+next()
+},PaymentHelper.razersuccess
+)
+
+
+router.get("/OrderFailed",(req,res)=>
+{
+req.send("unsuccess")
+}
+)
+
+
+
 router.get("/YourOrders",ProfileHelper.SingleOrder,async(req,res)=>
 {
 
@@ -154,12 +203,53 @@ router.get("/YourOrders",ProfileHelper.SingleOrder,async(req,res)=>
 })
 
 
-router.get("/My-account",UserHelper.SessionCheck,ProfileHelper.MainProfile,(req, res) => { 
+router.get("/My-account",(req, res,next) => { 
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  })
+
+
+},ProfileHelper.MainProfile);
+
+router.post("/cancelOrder",(req,res,next)=>
+{
+console.log("here");
+next()
+},ProfileHelper.cancelOrder
+
+)
+
+router.post("/SaveAddress",(req,res,next)=>
+{
+next()
+},ProfileHelper.SaveAddress
+
+)
+
+router.get("/paypalpay",async(req,res,next)=>
+{
+
+next()
+},PaymentHelper.paypalhelp)
+
+
+router.post("/verifyPayments",(req,res,next)=>
+{
+next()
+},PaymentHelper.razorpayhelp
+)
 
 
 
-});
 
-
-
-module.exports = router   
+module.exports = router    

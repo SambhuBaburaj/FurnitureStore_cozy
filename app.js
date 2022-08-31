@@ -8,6 +8,8 @@ const session = require("express-session");
 var logger = require('morgan');
 const mongooseConnection=require("./Connections/mongoose")
 const mongooseSchema=require("./Connections/UserSchema")
+var cors = require('cors')
+
 
 
 
@@ -40,7 +42,7 @@ app.use((req, res, next) => {
   next();
 });
 
-
+app.use(cors())
 
 
 
