@@ -43,7 +43,7 @@ function cartcontrol(UserObject, Quantity, productId, count) {
       },
       dataType: "json",
       success: (response) => {
-        location.reload();
+       window.location.reload();
       },
     });
   }
@@ -301,5 +301,43 @@ function razorpayPayment(order) {
     
   
   
+  }
+  function returnOrder(orderid)
+  {
+
+
+    swal({
+        title: "Are you sure?",
+        text: "do you want return this product ",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+
+            $.ajax({
+                type:'post',
+                url:"/ReuturnOrder",
+                data: {
+        orderid:orderid
+      
+                  },
+                  dataType: "json",
+                  success: (response) => {
+                  
+                    window.location.reload()
+                
+                      
+                  }
+            })
+
+
+        
+        } else {
+          swal("Your imaginary file is safe!");
+          window.location.reload()
+        }
+      });
   }
   

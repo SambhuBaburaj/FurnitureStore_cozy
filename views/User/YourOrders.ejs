@@ -11,6 +11,16 @@
     background-color: #ff0000;
     border-color: #285e8e; /*set the color you want here*/
 }
+.btn-sec {
+    color: rgb(1, 4, 0);
+    background-color: #09ff22;
+    border-color: #357ebd; /*set the color you want here*/
+}
+.btn-sec:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #ff0000;
+    border-color: #285e8e; /*set the color you want here*/
+}
 </style>
 
 
@@ -18,7 +28,7 @@
 
 
 
-<div class="card-body">
+<div class="container">
     <div class="row mb-50 mt-20 order-info-wrap">
         <div class="col-md-4">
             <article class="icontext align-items-start">
@@ -67,7 +77,13 @@
         </div> <!-- col// -->
         <div class="col-md-2" >
             <% console.log(  locals.orderDetails.CancelOrder); %> 
-            <% if(  locals.orderDetails.CancelOrder ==0 ) {  %> 
+
+            <% if(locals.orderDetails.DeliveryStatus=="delivered") { %> 
+            
+                <button onclick="returnOrder('<%=locals.orderDetails._id %>')" id="btn-sec" class="btn-sec btn-lg" >return order</button> 
+   
+
+            <% } else if(  locals.orderDetails.CancelOrder ==0 )  {  %> 
             <button onclick="CancelOrder('<%=locals.orderDetails._id %>')" id="btn-primary" class="btn-primary btn-lg" >Cancel Order</button> 
         <% }else { %>
             
@@ -77,7 +93,7 @@
             <% } %> 
         </div>
     </div> <!-- row // -->
-    <div class="row">
+    <div  class="">
         <div class="col-lg-7">
             <div class="table-responsive">
                 <table class="table">

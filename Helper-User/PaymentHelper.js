@@ -74,14 +74,16 @@ console.log('im here');
     },
   ]);
 
-  let TotalPrice = 0;
+  let TotalPrice = 0, TotalQuantity=0;
 
   CartProduct.forEach(function (CartItems) {
     TotalPrice =
     TotalPrice +
    ( CartItems.Quantity * (CartItems.product.Price -
     (CartItems.product.Price * CartItems.product.Discount) / 100));
+    TotalQuantity=TotalQuantity+ CartItems.Quantity
   });
+
 
   // console.log(user);
 
@@ -131,6 +133,7 @@ console.log('im here');
       PaymentStatus: "pending",
       DeliveryStatus: "pending",
       TotalAmount: Math.trunc(TotalPrice),
+      TotalQuantity:TotalQuantity,
       paymentMethod: "COD",
       CancelOrder: 0,
     });
@@ -324,13 +327,14 @@ const PaypalOrderPlaced=async(req,res)=>
       },
     ]);
   
-    let TotalPrice = 0;
+    let TotalPrice = 0, TotalQuantity=0 ;
   
     CartProduct.forEach(function (CartItems) {
       TotalPrice =
       TotalPrice +
      ( CartItems.Quantity * (CartItems.product.Price -
       (CartItems.product.Price * CartItems.product.Discount) / 100));
+      TotalQuantity=TotalQuantity+ CartItems.Quantity
     });
   
 
@@ -382,6 +386,7 @@ const PaypalOrderPlaced=async(req,res)=>
         DeliveryStatus: "pending",
         TotalAmount: Math.trunc(TotalPrice),
         paymentMethod: "PayPal",
+        TotalQuantity:TotalQuantity,
         CancelOrder: 0,
       });
       OrderDetails.save(function (err, room) {
@@ -548,13 +553,14 @@ const razersuccess=async (req,res)=>
     },
   ]);
 
-  let TotalPrice = 0;
+  let TotalPrice = 0, TotalQuantity=0;
 
   CartProduct.forEach(function (CartItems) {
     TotalPrice =
     TotalPrice +
    ( CartItems.Quantity * (CartItems.product.Price -
     (CartItems.product.Price * CartItems.product.Discount) / 100));
+    TotalQuantity=TotalQuantity+ CartItems.Quantity
   });
 
 
@@ -606,7 +612,9 @@ const razersuccess=async (req,res)=>
       DeliveryStatus: "pending",
       TotalAmount: Math.trunc(TotalPrice),
       paymentMethod: "RazorPay",
+      TotalQuantity:TotalQuantity,
       CancelOrder: 0,
+
     });
     OrderDetails.save(function (err, room) {
       var newRoomId = room._id;

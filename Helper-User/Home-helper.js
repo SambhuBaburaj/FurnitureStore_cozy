@@ -256,8 +256,9 @@ let quantity=0,TotalPrice=0,Price=0,Discount=0;
   
     Discount=Discount+CartItems.Quantity*(CartItems.product.Price*CartItems.product.Discount/100)
     Price=Price+(CartItems.Quantity* CartItems.product.Price)
-    TotalPrice=TotalPrice+(Price-Discount)
+  
 })
+TotalPrice=Price-Discount
 // console.log(Math.trunc(Price));
 //     console.log( Math.trunc(TotalPrice));
 //     console.log("sdi",Discount);

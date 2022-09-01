@@ -11,6 +11,7 @@ const MongoCart=require("../Connections/UserSchema").CartData
 const ProductStore=require("../Connections/AdminSchema").Products
 const CC = require("currency-converter-lt");
 const paypal = require('paypal-rest-sdk');
+const { OrderHelper } = require("../Helper-Admin/CategoryManagement");
  
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
@@ -249,7 +250,11 @@ next()
 },PaymentHelper.razorpayhelp
 )
 
+router.post("/ReuturnOrder",(req,res,next)=>
+{
 
+next()
+},ProfileHelper.ReturnProduct)
 
 
 module.exports = router    

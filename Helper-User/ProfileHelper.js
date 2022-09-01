@@ -51,11 +51,14 @@ const SingleOrder = async (req, res) => {
 
 const cancelOrder=async(req,res)=>
 {
-console.log(req.body);
+console.log("what i want",req.body);
 
 
+const details=await MongoOrder.findOne({_id:ObjectId(req.body.id)})
 
-MongoOrder.updateOne({_id:ObjectId(req.body.id)},{$set:{CancelOrder:1}},function(err,success)
+if(details.paymentMethod=="COD")
+{
+await MongoOrder.updateOne({_id:ObjectId(req.body.id)},{$set:{CancelOrder:1,DeliveryStatus:"canceled",PaymentStatus:"canceled"}},function(err,success)
 
 {
 if(success)
@@ -64,6 +67,19 @@ console.log(success);
 }
 
 })
+}
+else
+{
+await MongoOrder.updateOne({_id:ObjectId(req.body.id)},{$set:{CancelOrder:1,DeliveryStatus:"canceled",PaymentStatus:"refund initiated"}},function(err,success)
+
+{
+if(success)
+{
+console.log(success);
+}
+
+})
+}
 console.log(await MongoOrder.findOne({_id:ObjectId(req.body.id)}));
 res.json(true)
 
@@ -93,11 +109,26 @@ address.save()
 res.json("true")
 }
 }
+const ReturnProduct=(req,res)=>
+{
+  console.log(req.body);
+  MongoOrder.updateOne({_id:ObjectId(req.body.orderid)},{$set:{CancelOrder:1,DeliveryStatus:"canceled",PaymentStatus:"refund initiated"}},(s,e)=>
+  {
+    if(s)
+    console.log(s);
+    else
+    console.log(e);
+  })
+res.json(true)
+}
+
+
 
 
 module.exports = {
   SingleOrder,
   MainProfile,
   cancelOrder,
-  SaveAddress
+  SaveAddress,
+  ReturnProduct
 };

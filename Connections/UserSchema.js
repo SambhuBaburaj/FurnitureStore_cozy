@@ -39,6 +39,7 @@ const order_schema=new mongoose.Schema({
 PaymentStatus:String,
   userId:mongoose.ObjectId,
   TotalAmount:Number,
+  TotalQuantity:Number,
   CancelOrder:Number
 
   })

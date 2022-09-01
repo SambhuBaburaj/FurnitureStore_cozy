@@ -66,11 +66,13 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <% locals.Orders.forEach(function (element)  { %>
+                                                        <% locals.Orders.reverse().forEach(function (element)  { %>
                                                             <tr>
                                                              <td> <%=element._id %></td>
                                                              <td><%= (element.realDate).toDateString() %><br><%= (element.realDate).toLocaleTimeString();  %> </td>
-                                                            
+                                                  
+
+
                                                              <% if(  element.CancelOrder ==0 ) {  %> 
                                                                 <td><%=element.DeliveryStatus %></td>
                                                                 

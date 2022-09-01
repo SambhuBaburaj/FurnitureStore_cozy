@@ -2,7 +2,7 @@ require("dotenv").config();
 const mongoCategory = require("../Connections/AdminSchema");
 const ProductStore=require("../Connections/AdminSchema").Products
 const multer = require('multer');
-
+const MongoOrder=require("../Connections/UserSchema").OrderDetails
 const mongoose = require("mongoose");
 const AddCategory = (req, res, next) => {
   console.log("its here");
@@ -88,5 +88,24 @@ res.redirect("/admin/AddCategory?success='product added'")
   next()
 };
 
+const EditCat=async(req,res)=>
+{
+
+
+Allcategory=await mongoCategory.MainCategory.find()
+
+  res.render("admin/managecat",{Allcategory:Allcategory})
+}
+
+const OrderHelper=async (req,res)=>
+{
+
+  const orderdetails=await MongoOrder.find()
+const quantity=await MongoOrder.aggregate([{$project:{products:1}},{$unwind:"$products"},{$group:{_id:'$_id',quantity:{$sum:"$products.Quantity"}}}])
+
+  res.render("admin/UserOrders",{order:orderdetails.reverse(),quantity:quantity})
+}
+
 module.exports = { AddCategory, ListCategory, getCategory, productadd
-,AddPhoto };
+,AddPhoto ,EditCat,OrderHelper
+};
