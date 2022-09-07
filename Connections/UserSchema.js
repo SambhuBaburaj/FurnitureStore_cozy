@@ -55,4 +55,21 @@ const Address_schema=new mongoose.Schema({
 const address=mongoose.model('UserAddress',Address_schema)
 
   
-  module.exports = {user_data,CartData,OrderDetails,address}
+const BannerSchema=new mongoose.Schema({
+category:String,
+subcategory:String,
+  ProductName:String,
+  Desc:String,
+  Image:String
+
+
+})
+
+
+const BannerControl=mongoose.model("BannerControl",BannerSchema)
+
+
+
+
+
+  module.exports = {user_data,CartData,OrderDetails,address,BannerControl}

@@ -12,6 +12,9 @@ const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
 const MongoUserData=require("../Connections/UserSchema").user_data
 const MongoAddress=require("../Connections/UserSchema").address
+const MongoBanner=require("../Connections/UserSchema").BannerControl
+
+
 /* GET home page. */
 // const CategoryList=MongoCategory.find()
 
@@ -29,7 +32,10 @@ const ProductList=await ProductStore.find();
 const listofcat=await CategoryList()
 const length=(await CategoryList()).length;
 console.log(length);
-res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length});
+
+const banner=await MongoBanner.find()
+
+res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner});
 next();
 }
 

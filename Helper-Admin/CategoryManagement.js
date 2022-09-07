@@ -4,6 +4,7 @@ const ProductStore=require("../Connections/AdminSchema").Products
 const multer = require('multer');
 const MongoOrder=require("../Connections/UserSchema").OrderDetails
 const mongoose = require("mongoose");
+const { ObjectId } = require("mongodb");
 const AddCategory = (req, res, next) => {
   console.log("its here");
   const MainCategory = req.body.MainCategory;
@@ -92,7 +93,7 @@ const EditCat=async(req,res)=>
 {
 
 
-Allcategory=await mongoCategory.MainCategory.find()
+const Allcategory=await mongoCategory.MainCategory.find()
 
   res.render("admin/managecat",{Allcategory:Allcategory})
 }
@@ -105,7 +106,81 @@ const quantity=await MongoOrder.aggregate([{$project:{products:1}},{$unwind:"$pr
 
   res.render("admin/UserOrders",{order:orderdetails.reverse(),quantity:quantity})
 }
+const EditCategory=async (req,res)=>
+{
+  console.log(req.query.catid);
+
+  const category=await mongoCategory.MainCategory.findOne({_id:req.query.catid})
+  console.log(category);
+  res.render("admin/EditCategory",{category:category})
+}
+const updatecat=async (req,res)=>
+{
+console.log(req.body);
+const catdetail =await mongoCategory.MainCategory.findOne({_id:ObjectId(req.body.catid)})
+await ProductStore.updateMany({Category:catdetail.MainCategory},{Category:req.body.newcat})
+await mongoCategory.MainCategory.updateOne({MainCategory:catdetail.MainCategory},{$set:{MainCategory:req.body.newcat}})
+res.json(true)
+}
+
+
+
+const changeSubCategory=async (req,res)=>
+{console.log(req.body);
+
+  await ProductStore.updateMany({SubCategory:req.body.subcat},{SubCategory:req.body.newsubcat})
+  console.log(await mongoCategory.MainCategory.findOne({_id: ObjectId(req.body.catid)}));
+await mongoCategory.MainCategory.updateOne({_id: ObjectId(req.body.catid), SubCategory:req.body.subcat}, {$set: {'SubCategory.$': req.body.newsubcat}} ,(e,s)=>
+{
+  if(e)
+  console.log(e);
+  else
+  console.log(s);
+}).clone();
+res.json(true)  
+
+}
+const deleteSubCat=async(req,res)=>
+{
+  await mongoCategory.MainCategory.updateOne({ _id: ObjectId(req.body.catid) },
+     { $pull: { 'SubCategory': req.body.subcat }})
+     res.json(true)
+
+}
+
+const addNewSubcat=(req,res)=>
+{
+
+
+console.log(req.body);
+
+mongoCategory.MainCategory.updateOne({_id:req.body.catid},{$push:{SubCategory:req.body.newsubCatagory}},(e,s)=>
+{
+  if(e)
+  console.log(e);
+  else
+  console.log(s);
+})
+
+res.redirect("/admin/editcategory?catid="+req.body.catid)
+}
+
+const deletecat=async(req,res)=>
+{
+console.log(req.body);
+ await mongoCategory.MainCategory.remove({_id:req.body.catid},(e,s)=>
+ {
+  if(e)
+  console.log(e);
+  else
+  console.log(s);
+ }).clone()
+ res.json(true)
+}
+
 
 module.exports = { AddCategory, ListCategory, getCategory, productadd
-,AddPhoto ,EditCat,OrderHelper
+,AddPhoto ,EditCat,OrderHelper,EditCategory,updatecat,changeSubCategory,
+deleteSubCat,addNewSubcat,deletecat
+
 };

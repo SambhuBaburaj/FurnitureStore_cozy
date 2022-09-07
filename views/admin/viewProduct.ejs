@@ -46,6 +46,9 @@
                                             <th data-priority="3">Desc</th>
                                             <th data-priority="6">Images</th>
                                       
+                                            <th data-priority="6">actions</th>
+                             
+                                      
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -60,10 +63,11 @@
   <th><%=element.Disc  %>  </th>
 
     <th><img src="/AdminAssets/images/addProduct/<%=element.Images[0]  %>" alt="" style="height: 40px; width: 40px;">  </th>
-  
+    <th class=""><a href="/admin/editproduct?productid=<%=element._id  %>"><i class="fas fa-edit"></i></a> <br> <br><a onclick="deleteproduct('<%=element._id %>')"><i class="fas fa-trash-alt"></i></a></th>
                                                 </tr>  
+                                                
   
-  
+
                                         <%      });  %> 
 
 

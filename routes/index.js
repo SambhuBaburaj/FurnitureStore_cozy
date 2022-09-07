@@ -21,12 +21,12 @@ paypal.configure({
 /* GET home page. */
 
 
-router.use((req, res, next) => {
+// router.use((req, res, next) => {
 
-  req.session.user="sambhubaburaj007@gmail.com"
-  next()
+//   req.session.user="sambhubaburaj007@gmail.com"
+//   next()
 
- })
+//  })
 
 
 
@@ -255,6 +255,7 @@ router.post("/ReuturnOrder",(req,res,next)=>
 
 next()
 },ProfileHelper.ReturnProduct)
+
 
 
 module.exports = router    

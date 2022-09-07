@@ -1,0 +1,123 @@
+<%- include('partials/Header') %>
+
+<div style="margin-top: 135px;" class="col-lg-6 ">
+    <div class="card m-b-30">
+        <div class="card-body">
+<div>
+            <h4 class="mt-0 header-title">Add Product</h4>
+            <% if(locals.success) { %> 
+                <label class="float-right" style="color: green;" for="">product has been added</label>
+            <% } %> 
+            </div>
+            <p class="sub-title">you can add your products here.</p>
+               
+            <form action="/admin/saveeditpditproduct" method="post" enctype="multipart/form-data" >
+                <select id="MainCategory" class="form-control" name="Category" onchange="callSubCategory()">
+                    
+                    <option name="Category" value=" " selected disabled><%=locals.product.Category  %></option>
+                    <% locals.category.forEach((element)=> { %>
+                        <option  ><%= element.MainCategory %>  </option>
+
+                   <% }) %> 
+                
+                    
+
+                        
+                  </select>
+
+                  <br>
+                  <select class="form-control" name="subCategory" id="subCatagory">
+                    <option  value=" " selected disabled><%=locals.product.SubCategory  %></option>
+                  </select>
+
+                <div class="form-group">
+                    <br> 
+                    <label>Product name</label>
+                    <div>
+                        <input hidden value="<%=locals.product._id  %>" type="text" name="productid" id="">
+                        <input name="ProductName" type="text" class="form-control" required
+                               data-parsley-minlength="6" placeholder="Product name" value="<%=locals.product.ProductName  %> "/>
+                    </div>
+                    <label>Price</label>
+                    <div>
+                        <input name="price" type="number" class="form-control" required
+                               data-parsley-minlength="6" placeholder="Price" value="<%=locals.product.Price  %>" />
+                    </div>
+                    <label>discount</label>
+                    <div>
+                        <input name="DisPrice" type="number" class="form-control" required
+                               data-parsley-minlength="6" placeholder="in percentage" value="<%=locals.product.Discount  %>"/>
+
+                    </div>
+                    <label>Product Details</label>
+                    <div>
+                      <textarea placeholder="<%=locals.product.Disc  %>" name="desc" class="form-control" id="" cols="15" rows="5" value="<%=locals.product.Disc  %>"><%=locals.product.Disc  %></textarea> 
+                    </div>
+
+
+                    <% locals.product.Images.forEach((element)=>
+                    { %>
+<div class="row mb-3">
+    <img  src="/AdminAssets/images/addProduct/<%=element %>" alt="" style="height: 40px; width: 40px;"> 
+    <a onclick="deleteproductimage('<%=element %>','<%=locals.product._id  %>')" class="ml-4 btn btn-primary" href="">delete</a>
+    </div> 
+
+
+
+                  <%  }) %> 
+                    <label>images</label>
+                    <div class="form-group">
+                        <input multiple id="img" name="images" type="file" class="form-control"
+                              placeholder="images"/>
+                        <img src="#" alt="" id="imgPreview">
+                    </div>
+                </div>
+          
+              
+
+                <!-- <div class="form-group">
+                    <label>Min check</label>
+                    <div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1" data-parsley-multiple="groups"
+                                   data-parsley-mincheck="2">
+                             
+                             
+                                   <label class="custom-control-label" for="customCheck1">And this</label>
+
+                                
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck2" data-parsley-multiple="groups"
+                                   data-parsley-mincheck="2">
+                            <label class="custom-control-label" for="customCheck2">Can't check this</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck3" data-parsley-multiple="groups"
+                                   data-parsley-mincheck="2">
+                            <label class="custom-control-label" for="customCheck3">This too</label>
+                        </div>
+
+                    </div>
+                </div> -->
+
+                <div class="form-group m-b-0">
+                    
+                    <div>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                            Submit
+                        </button>
+                        <button id="" type="reset" class="btn btn-secondary waves-effect m-l-5">
+                            Cancel
+                        </button>
+                     
+                    </div>
+                </div>
+            </form>
+         
+            
+        </div>
+    </div>
+</div> <!-- end col -->
+
+<%- include("partials/footer") %> 

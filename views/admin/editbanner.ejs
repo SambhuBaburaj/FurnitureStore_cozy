@@ -1,0 +1,93 @@
+<%- include("partials/header") %>
+
+
+
+<div  style="margin-top: 135px;" class="col-lg-6">
+    <div class="card m-b-30">
+        <div class="card-body">
+<h4>add banner</h4>
+            <p class="sub-title">you can add your products here.</p>
+               
+            <form action="/admin/saveeditBanner" method="post" enctype="multipart/form-data" >
+                
+
+                  <br>
+                  <select id="MainCategory" class="form-control" name="Category" onchange="callSubCategory()">
+                    
+                    <option name="Category" value=" " selected disabled><%=locals.banner.category  %></option>
+                    <% locals.category.forEach((element)=> { %>
+                        <option  ><%= element.MainCategory %>  </option>
+
+                   <% }) %> 
+                
+                    
+
+                        
+                  </select>
+
+                  <br>
+                  <select class="form-control" name="subCategory" id="subCatagory">
+                    <option  value=" " selected disabled><%=locals.banner.subcategory %></option>
+                  </select>
+                  <input hidden name="bannerid" type="text" class="form-control" value="<%=locals.banner._id %>"
+                  data-parsley-minlength="6" placeholder="Product name"/>
+                <div class="form-group">
+                    <br> 
+                    <label>Product name</label>
+                    <div>
+                        <input value="<%=locals.banner.ProductName %> " name="bannername" type="text" class="form-control" required
+                               data-parsley-minlength="6" placeholder="Product name"/>
+                    </div>
+                 
+                    <label>Product Details</label>
+                    <div>
+                      <textarea  placeholder="add details" name="desc" class="form-control" id="" cols="15" rows="5"><%=locals.banner.ProductName %></textarea> 
+                    </div>
+
+                    <label>images</label>
+
+                   <%  if(locals.banner.Image) { %>
+                
+                    <div class="row mb-3">
+                        <img  src="/AdminAssets/images/addProduct/<%=locals.banner.Image %>" alt="" style="height: 40px; width: 40px;"> 
+                        <a onclick="deletebannerimage('<%=locals.banner._id %>')" class="ml-4 btn btn-primary" href="">delete</a>
+                        </div> 
+                    <% } else { %> 
+                        <div class="form-group">
+                            <input multiple id="img" name="images" type="file" class="form-control"
+                                  placeholder="images"/>
+                            <img src="#" alt="" id="imgPreview">
+                        </div>
+    
+    
+<% } %> 
+
+
+                </div>
+          
+              
+
+
+                <div class="form-group m-b-0">
+                    
+                    <div>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                            Submit
+                        </button>
+                        <button id="" type="reset" class="btn btn-secondary waves-effect m-l-5">
+                            Cancel
+                        </button>
+                     
+                    </div>
+                </div>
+            </form>
+         
+            
+        </div>
+    </div>
+</div>
+
+<script defer src="https://cdn.crop.guide/loader/l.js?c=BTKJBK"></script>
+
+
+<%- include("partials/footer") %>

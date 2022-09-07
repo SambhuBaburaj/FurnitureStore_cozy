@@ -66,7 +66,7 @@ if(success)
 console.log(success);
 }
 
-})
+}).clone()
 }
 else
 {
@@ -78,7 +78,7 @@ if(success)
 console.log(success);
 }
 
-})
+}).clone()
 }
 console.log(await MongoOrder.findOne({_id:ObjectId(req.body.id)}));
 res.json(true)

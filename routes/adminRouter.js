@@ -119,4 +119,84 @@ router.get("/editcatgory", (req, res) => {
 
 router.post("/orderModify",OrderHelper.OrderStatus, (req, res) => {});
 
+router.get("/editcategory",AdminCategory.EditCategory,(req,res)=>
+{
+
+})
+
+
+router.post("/updateCategory",(req,res,next)=>
+{
+next();
+}
+,AdminCategory.updatecat)
+
+
+
+router.post("/updatesubCategory",AdminCategory.changeSubCategory,(req,res)=>
+{
+
+})
+router.post("/deletesubcat",AdminCategory.deleteSubCat)
+
+
+
+router.post("/updateNewSubCatagory",AdminCategory.addNewSubcat)
+
+router.post("/deleteCategory",AdminCategory.deletecat)
+router.get("/editproduct",ProductManagement.editproduct)
+
+
+
+
+router.post("/saveeditpditproduct",upload.array("images",7),(req,res,next)=>
+{
+  
+
+    if (!req.files) {
+      console.log("no files");
+    }
+    next();
+
+
+
+},ProductManagement.updateProduct)
+
+
+router.post("/deleteimage",ProductManagement.deleteimage,(req,res)=>
+{
+
+
+})
+
+router.post("/deleteproduct",ProductManagement.deleteproduct)
+
+router.get("/bannerview",ProductManagement.BannerView)
+
+router.get("/AddBanner",ProductManagement.AddBanner,(req,res)=>
+{
+
+})
+
+router.post("/AddBanner", upload.array("images"),(req,res,next)=>
+{
+  if (!req.files) {
+    console.log("no files");
+  }
+  next();
+},ProductManagement.postBanner)
+
+router.post("/deleteBanner",ProductManagement.deletebanner)
+
+router.get("/editbanner",ProductManagement.editBanner)
+
+
+router.post("/deleteBannerimage",ProductManagement.deletebannerimage)
+router.post("/saveeditBanner",upload.array("images",1),(req,rea,next)=>
+{
+  if (!req.files) {
+    console.log("no files");
+  }
+  next();
+},ProductManagement.saveeditbanner)
 module.exports = router;

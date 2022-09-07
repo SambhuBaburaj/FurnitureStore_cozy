@@ -20,6 +20,8 @@
                                 <th>Category</th>
                                 <th>Sub Category</th>
                                 <th>Edit</th>
+                                <th>delete</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -33,7 +35,8 @@
 <%= e %> <br>
         <% }) %> 
             </td>
-            <td> <a href="/admin/editcatgory"><i class="fas fa-edit"></i></a> </td>
+            <td> <a href="/admin/editcategory?catid=<%=element._id  %> "><i class="fas fa-edit"></i></a> </td>
+            <td> <a  href="" onclick="deletecategory('<%=element._id %>')"><i class="fas fa-trash-alt"></i></a> </td>
         <% count++ %> 
 <% }) %> 
                

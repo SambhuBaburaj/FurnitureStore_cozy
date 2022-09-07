@@ -1,0 +1,138 @@
+
+    <%- include("partials/header") %> 
+</div>
+<!-- header-bg -->
+
+<div class="wrapper">
+    <div class="container-fluid">
+        <!-- Page-Title -->
+        <div class="page-title-box">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <h4 class="page-title text-center">Uploads Validation</h4>
+                </div>
+              
+            </div>
+            <!-- end row -->
+        </div>
+
+        <div class="row">
+          <!-- end col -->
+<div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="card m-b-30">
+                    <div class="card-body">
+                        <form action="/admin/updateNewSubCatagory" method="post" >
+
+                            <div class="form-group">
+                                <label>Main Category Name
+                                </label>
+                                <div class="row">
+                                    <input name="catid" hidden type="text" value="<%=locals.category._id %>">
+                                    <input type="text" class="form-control w-75 ml-4" required 
+                                           data-parsley-minlength="2" placeholder="<%=locals.category.MainCategory %>" value="<%=locals.category.MainCategory %>"  id="mainCatagory" name="catagory" />
+                                           <button onclick="updatecat('<%=locals.category._id %>')" class="btn btn-primary"> update</button>
+                                                    </div>
+                            </div>
+                           
+                        
+                            
+                            <div class="form-group">
+                                <label>Sub-Categories</label>
+                       
+                           
+
+                                    <% locals.category.SubCategory.forEach(element => { %>
+                                        <div class="row mt-12" >
+                                        <input  type="text" class="form-control col-lg-10 " required 
+                                        placeholder=" "  name="subCatagory" id="<%= element %>" value='<%= element %> ' />
+                                          <button style="height: 35px;" class="btn btn-primary col-lg-1 "  onclick="subCatachangeInput('<%= element %>','<%=locals.category._id %>' )"> <i class="far fa-save"></i> </button>
+                                          <button style="height: 35px;" class="btn btn-danger col-lg-1" onclick="subCatachangedelete('<%= element %>','<%=locals.category._id %>')"><i class="fas fa-trash-alt"></i></button>
+
+   </div>
+<br>
+                                  <%  }); %> 
+                                  
+                             
+                                
+                                    <div id="addSubCatagory">
+
+                           </div>
+                               <div class="m-4"><button class=" btn btn-success" onclick="addSubCatagoriesAtEdit()">+</button>
+                           <button class=" btn btn-danger ml-2" onclick="removeSubCatagories()">-</button></div>  
+
+                       
+                           <button type="submit" class="btn btn-primary waves-effect waves-light text-center mt-5"  id="submit" style="visibility:hidden">
+                                        Submit
+                                    </button>
+                            </div>
+                                </div>
+                            </div>
+                            
+                            
+
+
+                            <div class="form-group m-b-0">
+                                <br><div>
+                                    
+                                    
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div> <!-- end col -->
+            <div class="col-md-3"></div>
+        </div> <!-- end row -->
+
+    </div>
+    <!-- end container-fluid -->
+</div>
+
+
+ <script src="/plugins/parsleyjs/parsley.min.js"></script> 
+
+<!-- App js -->
+<script src="/assets/js/app.js"></script>
+<script>
+    $(document).ready(function() {
+        $('form').parsley();
+    });
+
+
+
+
+    function addSubCatagoriesAtEdit() {
+    event.preventDefault();
+    let select = document.querySelector("#subCatagory")
+    var new_input = "<input type='text' id='subCatagory' name='newsubCatagory' class='form-control w-75 mt-2'>";
+    $('#addSubCatagory').append(new_input);
+    document.getElementById("submit").style.visibility = "visible"
+
+    
+
+}
+
+
+
+
+function removeSubCatagories() {
+    event.preventDefault();
+
+    var select = document.getElementById('addSubCatagory');
+    select.removeChild(select.lastChild);
+}
+
+
+function subCatachangeInput()
+{
+    event.preventDefault();
+
+    document.querySelector(classname).removeAttribute('readonly')
+    document.getElementById(cataName).style.visibility = "hidden"
+
+    document.getElementById(btnId).style.visibility = "visible"
+}
+</script>
+    <%- include("partials/footer") %> 

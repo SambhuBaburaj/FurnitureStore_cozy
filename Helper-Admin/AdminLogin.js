@@ -48,7 +48,7 @@ next()
 const StatusChange=async(req,res,next)=>
 {
   
-  const status=req.params.values
+  const status=req.params.values 
   // const id=status[0]
   console.log(status);
   // console.log(status.status);
