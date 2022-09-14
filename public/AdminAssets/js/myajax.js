@@ -387,3 +387,195 @@ function deletebannerimage(bannerId)
 
 
 }
+
+function usercount(day)
+{
+
+
+  $.ajax({
+    type: "get",
+    url: "/admin/usercount?day="+day,
+  
+    dataType: "json",
+    success: (response) => {
+
+      document.getElementById("usercount").innerHTML =
+      response 
+    
+
+
+      // setTimeout(location.reload(), 5000);
+    },
+  });
+
+
+}
+
+
+
+function revenuecount(day)
+{
+
+
+  $.ajax({
+    type: "get",
+    url: "/admin/revenuecount?day="+day,
+  
+    dataType: "json",
+    success: (response) => {
+
+      document.getElementById("revenue").innerHTML =
+       response +" ₹"
+    
+
+
+      // setTimeout(location.reload(), 5000);
+    },
+  });
+
+
+}
+
+
+
+function totaloreders(day)
+{
+
+
+  $.ajax({
+    type: "get",
+    url: "/admin/totaloreders?day="+day,
+  
+    dataType: "json",
+    success: (response) => {
+
+      document.getElementById("ordercount").innerHTML =
+       response
+    
+
+
+      // setTimeout(location.reload(), 5000);
+    },
+  });
+
+
+}
+
+
+function cancelcount(day)
+{
+
+
+  $.ajax({
+    type: "get",
+    url: "/admin/cancelcount?day="+day,
+  
+    dataType: "json",
+    success: (response) => {
+
+      document.getElementById("cancelcount").innerHTML =
+       response
+    
+
+
+      // setTimeout(location.reload(), 5000);
+    },
+  });
+
+
+}
+
+
+function loadLineChart()
+{
+  $.ajax({
+    type: "get",
+    url: "/admin/linechart",
+  
+    dataType: "json",
+    success: (response) => {
+
+
+      const labels = response.years;
+    
+
+
+
+      const data = {
+        labels: labels,
+        datasets: [{
+          label: 'annual revenue',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(0, 235, 125)',
+          data: response.revenue,
+        }]
+      };
+    
+      const config = {
+        type: 'line',
+        data: data,
+        options: {}
+      };
+
+
+      const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+      );
+
+
+
+      // setTimeout(location.reload(), 5000);
+    },
+  });
+}
+
+
+
+
+function donutchart()
+{
+
+
+  $.ajax({
+    type: "get",
+    url: "/admin/donutchart",
+  
+    dataType: "json",
+    success: (response) => {
+
+      const data = {
+        labels: [
+          'COD',
+          'razerPay',
+          'PayPal'
+        ],
+        datasets: [{
+          label: 'revenue',
+          data: response,
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+            'rgb(255, 205, 86)'
+          ],
+          hoverOffset: 4
+        }]
+      };
+     
+
+      const config = {
+        type: 'doughnut',
+        data: data,
+      };
+
+
+      const myChart = new Chart(
+        document.getElementById('donutchart'),
+        config
+      );   
+
+
+
+}
+  })
+}

@@ -56,7 +56,8 @@ const New_user = async (req, res) => {
       email: req.body.user_email,
       password: hashed,
       phone: req.body.Phone,
-      isBlocked:0
+      isBlocked:0,
+      date:new Date()
     }); 
     new_user.save();
     res.render("user/User-login",{logout:"account created",Category:await CategoryList()})

@@ -126,31 +126,29 @@
                                 </div>
                                 <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
                                     <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="card mb-3 mb-lg-0">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">Billing Address</h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <address>3522 Interstate<br> 75 Business Spur,<br> Sault Ste. <br>Marie, MI 49783</address>
-                                                    <p>New York</p>
-                                                    <a href="#" class="btn-small">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">Shipping Address</h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <address>4299 Express Lane<br>
-                                                        Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                    <p>Sarasota</p>
-                                                    <a href="#" class="btn-small">Edit</a>
-                                                </div>
-                                            </div>
-                                        </div>
+                                      
+
+<% locals.address.forEach(element => { %>
+
+    <div class="mt-3 col-lg-6">
+
+    <div class="card mb-3 mb-lg-0">
+        <div class="card-header">
+            <h5 class="mb-0">Address</h5>
+        </div>
+        <div class="card-body">
+            <p> <%=element.address.firstname%> </p>
+            <address><%= element.address.address%><br> <%= element.address.city%>,<br> <%= element.address.state%>, <br><%= element.address.postcode%></address>
+            <p><%= element.address.country%></p>
+            <a href="/editAddress?addressid=<%= element._id  %> " class="btn-small">Edit</a>
+            <a  onclick="deleteaddress('<%= element._id%>')" class=" float-right tn-small">delete</a>
+        </div>
+    </div>
+</div>
+<% }); %> 
+
+                              
+                          
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
@@ -218,6 +216,8 @@
 
 
 <%- include('partials/footer') %>
+<script src="assets/js/userajax.js"></script>
+
 <script src="assets/js/vendor/vendor.min.js"></script>
 <script src="assets/js/plugins/plugins.min.js"></script>
 

@@ -7,6 +7,8 @@ const MongoAddress=require("../Connections/UserSchema").address
 const session = require("express-session");
 const { ObjectId } = require("mongodb");
 const { json } = require("body-parser");
+const { address } = require("../Connections/UserSchema");
+const { query } = require("express");
 
 const CategoryList = async () => {
   return await MongoCategory.find();
@@ -15,11 +17,14 @@ const CategoryList = async () => {
 const MainProfile = async (req, res) => {
   const user = await MongoUser.findOne({ email: req.session.user });
   const UserOrder = await MongoOrder.find({ userId: user._id });
-  console.log(UserOrder);
+
+const Address=await MongoAddress.find({UserId:user._id})
+  console.log(Address);
   res.render("user/User-profile", {
     Category: await CategoryList(),
     Orders: UserOrder,
-    user:user
+    user:user,
+    address:Address
   });
 };
 
@@ -122,6 +127,46 @@ const ReturnProduct=(req,res)=>
 res.json(true)
 }
 
+const addreessdelete=async (req,res)=>
+{
+console.log(req.body);
+
+await MongoAddress.remove({_id:ObjectId(req.body.addressid) })
+
+res.json(true)
+}
+const addressEditer=async(req,res)=>
+{
+
+const Address=await MongoAddress.findOne({_id:ObjectId(req.query.addressid)})
+console.log(Address);
+
+res.render("user/EditAddress" ,{ Category: await CategoryList(),Address:Address.address,id:Address})
+
+}
+
+
+const updateaddress=async (req,res)=>
+{
+
+  console.log(req.body);
+await MongoAddress.updateOne({_id:ObjectId(req.body.addressid)},{'address.firstname':req.body.firstname,'address.lastname':req.body.lastname,'address.address':req.body.address,'address.country':req.body.country,'address.city':req.body.city,'address.state':req.body.state,'address.postcode':req.body.postcode,'address.phone':req.body.phone,'address.email':req.body.email,'address.extra':req.body.extra})
+res.json(true)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -130,5 +175,8 @@ module.exports = {
   MainProfile,
   cancelOrder,
   SaveAddress,
-  ReturnProduct
+  ReturnProduct,
+  addreessdelete,
+  addressEditer,
+  updateaddress
 };

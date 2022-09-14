@@ -3,6 +3,8 @@ var router = express.Router();
 const AdminCategory = require("../Helper-Admin/CategoryManagement");
 const AdminHelper = require("../Helper-Admin/AdminLogin");
 const OrderHelper = require("../Helper-Admin/OrderHelper");
+
+const DashHelper=require("../Helper-Admin/DashBoardHelper")
 const ProductManagement = require("../Helper-Admin/ProductManagement");
 const multer = require("multer");
 
@@ -199,4 +201,14 @@ router.post("/saveeditBanner",upload.array("images",1),(req,rea,next)=>
   }
   next();
 },ProductManagement.saveeditbanner)
+
+
+router.get("/usercount",DashHelper.usercount)
+router.get("/revenuecount",DashHelper.revenuecount)
+router.get("/totaloreders",DashHelper.ordercount)
+router.get("/cancelcount",DashHelper.cancelcount)
+router.get("/linechart",DashHelper.linechart)
+router.get("/donutchart",DashHelper.donutchart)
+
+
 module.exports = router;

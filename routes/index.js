@@ -257,5 +257,10 @@ next()
 },ProfileHelper.ReturnProduct)
 
 
+router.post("/DeleteAddress",ProfileHelper.addreessdelete)
 
+
+router.get("/editAddress",ProfileHelper.addressEditer)
+
+router.post("/saveupdateAddress",ProfileHelper.updateaddress)
 module.exports = router    
