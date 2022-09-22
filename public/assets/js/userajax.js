@@ -349,3 +349,63 @@ function saveupdateAddress(
     },
   });
 }
+
+
+function ApplyCoupon()
+{
+event.preventDefault()
+
+  const coupon=document.getElementById("coupon").value
+
+  $.ajax({
+    type: "post",
+    url: "/ApplyCoupon",
+    data: {
+      coupon: coupon,
+    },
+    dataType: "json",
+    success: (response) => {
+      
+      console.log(response);
+if(response.status=="Used")
+{
+
+  document.getElementById("denied").innerHTML =
+  "coupon Already Used" 
+  document.getElementById("approved").innerHTML =
+  " " 
+
+}
+if(response.status=="denied")
+{
+  document.getElementById("denied").innerHTML =
+  "Invalid coupon !" 
+  document.getElementById("approved").innerHTML =
+  " " 
+}
+
+if(response.status=="min")
+{
+  document.getElementById("denied").innerHTML =
+  "minimum spend is "+response.cap +"!"
+  document.getElementById("approved").innerHTML =
+  " " 
+}
+
+
+if(response.status=="applied")
+{
+  document.getElementById("approved").innerHTML =
+  "coupon  applied!" 
+  document.getElementById("denied").innerHTML =
+  " " 
+  document.getElementById("grand").innerHTML =
+response.GrantTotal
+
+document.getElementById("abc").innerHTML =
+response.discount+"₹"
+}
+    },
+  });
+
+} 

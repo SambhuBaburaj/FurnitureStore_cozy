@@ -320,18 +320,11 @@
                             <div class="col-lg-6 col-md-6">
                                 <div class="billing-info mb-4">
                                     <label>Email Address</label>
-                                    <input id="email" name="email" type="text" />
+                                    <input  id="email" name="email" type="text" />
                                 </div>
                             </div>
                         </div>
-                        <div class="additional-info-wrap">
-                            <h4>Additional information</h4>
-                            <div class="additional-info">
-                                <label>Order notes</label>
-                                <textarea id="extra" name="additional"  placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
-                            </div>
-                           
-                        </div>
+                  
                    
                  
                     </div>
@@ -362,9 +355,7 @@
 
 
 
-
-
-
+<br>
 
 
 
@@ -455,7 +446,11 @@
                                 <div class="your-order-bottom">
                                     <ul>
                                         <li class="your-order-shipping">Coupon Discount</li>
+                                        <% if(locals.CheckoutData.coupon) { %>
+                                        <li>₹ <%= locals.CheckoutData.coupon%></li>
+                                        <% } else {%>
                                         <li>₹0</li>
+                                        <% } %>
                                     </ul>
                                     <ul>
                                         <li class="your-order-shipping">Shipping</li>
@@ -469,6 +464,7 @@
                                     </ul>DisPrice
                                 </div>
                             </div>
+                            
                             <div class="payment-method">
                                 <div class="payment-accordion element-mrg">
                                     <div id="faq" class="panel-group">
@@ -482,6 +478,7 @@
                                         
                                        
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -504,6 +501,8 @@
                         </div>
                     </div>
                 </div>
+
+                
             </div>
         </div>
 

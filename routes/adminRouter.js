@@ -21,7 +21,8 @@ var upload = multer({
 });
 
 router.get("/", AdminHelper.SessionCheck, function (req, res) {
-  res.render("admin/AdminHome", { title: "Express" }); //log out success need to be added
+  // res.render("admin/AdminHome", { title: "Express" }); //log out success need to be added
+  res.redirect("/admin/home")
 });
 
 router.post("/Login", AdminHelper.AdminLogin);
@@ -209,6 +210,10 @@ router.get("/totaloreders",DashHelper.ordercount)
 router.get("/cancelcount",DashHelper.cancelcount)
 router.get("/linechart",DashHelper.linechart)
 router.get("/donutchart",DashHelper.donutchart)
+router.get("/revenuereport",DashHelper.revenuereport)
 
+router.get("/CuponsControl",OrderHelper.Couponsview)
+router.get("/addCoupons",OrderHelper.addCoupons)
+router.post("/AddCoupons",OrderHelper.SaveCoupons)
 
 module.exports = router;

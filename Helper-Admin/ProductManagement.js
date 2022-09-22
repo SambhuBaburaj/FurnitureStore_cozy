@@ -4,6 +4,27 @@ const ProductStore=require("../Connections/AdminSchema").Products
 const multer = require('multer');
 const { ObjectId } = require("mongodb");
 const MongoBanner=require("../Connections/UserSchema").BannerControl
+const MongoOrder=require("../Connections/UserSchema").OrderDetails
+
+async function years()
+{
+
+  const years=await MongoOrder.aggregate([{$match:{$and:[{CancelOrder:0},{DeliveryStatus:"delivered"}]}   },{$project:{year:{$year:"$realDate"},TotalAmount:1}},{$group:{_id:'$year',sum:{$sum:'$TotalAmount'}}},{$sort:{_id:-1}}])
+
+
+  let y=0,count=0,yearcount=[]
+  
+for(i=0;i<years.length;i++)
+{
+  yearcount[i]=years[i]._id
+}
+return yearcount
+
+}
+
+
+
+
 const ViewProducts=async (req,res)=>
 {
 
@@ -12,7 +33,7 @@ const ViewProducts=async (req,res)=>
    console.log(Products); 
   
 //    console.log(category);
-res.render("admin/viewProduct",{products:Products,})
+res.render("admin/viewProduct",{products:Products,years:await years()})
 
 }
 
@@ -24,7 +45,7 @@ const editproduct=async(req,res)=>
 console.log(req.query.productid);
 const product=await ProductStore.findOne({_id:ObjectId(req.query.productid)})
 
-res.render("admin/EditProduct",{product:product,category:category})
+res.render("admin/EditProduct",{product:product,category:category,years:await years() })
 
 }
 
@@ -97,7 +118,7 @@ const BannerView=async(req,res)=>
 
 const banner=await MongoBanner.find()
 console.log(banner);
-res.render("admin/bannerControl",{banner:banner})
+res.render("admin/bannerControl",{banner:banner,years:await years()})
 
 }
  
@@ -106,7 +127,7 @@ const AddBanner=async (req,res)=>
 {
 
     const category=await mongoCategory.MainCategory.find()
-res.render("admin/AddBanner",{category:category})
+res.render("admin/AddBanner",{category:category,years:await years()})
 
 
 }
@@ -164,7 +185,7 @@ const banner=await MongoBanner.findOne({_id:ObjectId(req.query.bannerid)})
 
 
 const category=await mongoCategory.MainCategory.find()
-res.render("admin/editbanner",{banner:banner,category:category})
+res.render("admin/editbanner",{banner:banner,category:category,years:await years()})
 
 }
 

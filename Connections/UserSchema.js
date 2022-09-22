@@ -70,7 +70,39 @@ subcategory:String,
 const BannerControl=mongoose.model("BannerControl",BannerSchema)
 
 
+const CouponsScheme=new mongoose.Schema({
+CouponsID:String,
+ExpireDate:Date,
+Discount:Number,
+Desc:String,
+Cap:Number
+  })
+  
+  
+  const Coupons=mongoose.model("Coupons",CouponsScheme)
+  
+  
+
+const UsedCoupons=new mongoose.Schema({
+user:String,
+CouponsId:String,
+Date:Date,
+Discount:Number
+
+
+})
+const CouponsUsed=mongoose.model("Used_Coupons",UsedCoupons)
+
+
+const wishList=new mongoose.Schema({
+UserId:String,
+Products:Array
+
+})
+
+const UserWishlist=mongoose.model("UserWishlist",wishList)
 
 
 
-  module.exports = {user_data,CartData,OrderDetails,address,BannerControl}
+
+  module.exports = {user_data,CartData,OrderDetails,address,BannerControl,Coupons,CouponsUsed,UserWishlist}

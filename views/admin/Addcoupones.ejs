@@ -1,0 +1,75 @@
+<%- include("partials/header") %>
+
+
+<div  style="margin-top: 135px;" class="col-lg-6">
+    <div class="card m-b-30">
+        <div class="card-body">
+<h4>add banner</h4>
+            <p class="sub-title">you can add your products here.</p>
+               
+            <form action="/admin/AddCoupons" method="post"  >
+                
+
+            
+
+
+                <div class="form-group">
+                    <br> 
+                    <label>coupones id</label>
+                    <div>
+                        <input name="coupone" type="text" class="form-control" required
+                               data-parsley-minlength="6" placeholder="coupones id"/>
+                    </div>
+                 <br>
+                    <label>expire date</label>
+                    <div>
+                        <input name="Expire" type="number" class="form-control" required
+                               data-parsley-minlength="6" placeholder="expire date"/>
+                    </div>
+                    <br>
+                    <label>price Cap</label>
+                    <div>
+                        <input name="Cap" type="number" class="form-control" required
+                               data-parsley-minlength="6" placeholder="Price Cap"/>
+                    </div>
+<br>
+
+                    <label>Discount</label>
+                    <div>
+                        <input name="Discount" type="number" class="form-control" required
+                               data-parsley-minlength="6" placeholder="Discount in percentage"/>
+                    </div>
+
+<br>
+
+                    <label>Product Details</label>
+                    <div>
+                      <textarea placeholder="add details" name="desc" class="form-control" id="" cols="15" rows="5"></textarea> 
+                    </div>
+ 
+                </div>
+          
+              
+
+
+                <div class="form-group m-b-0">
+                    
+                    <div>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">
+                            Submit
+                        </button>
+                        <button id="" type="reset" class="btn btn-secondary waves-effect m-l-5">
+                            Cancel
+                        </button>
+                     
+                    </div>
+                </div>
+            </form>
+         
+            
+        </div>
+    </div>
+</div>
+
+<script defer src="https://cdn.crop.guide/loader/l.js?c=BTKJBK"></script>
+<%- include("partials/footer") %>

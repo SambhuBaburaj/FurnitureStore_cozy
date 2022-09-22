@@ -17,11 +17,42 @@ const AddCategory = (req, res, next) => {
   next();
 };
 
+
+
+
+async function years()
+{
+
+  const years=await MongoOrder.aggregate([{$match:{$and:[{CancelOrder:0},{DeliveryStatus:"delivered"}]}   },{$project:{year:{$year:"$realDate"},TotalAmount:1}},{$group:{_id:'$year',sum:{$sum:'$TotalAmount'}}},{$sort:{_id:-1}}])
+
+
+  let y=0,count=0,yearcount=[]
+  
+for(i=0;i<years.length;i++)
+{
+  yearcount[i]=years[i]._id
+}
+return yearcount
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 const ListCategory = async (req, res) => {
   // res.render("admin/Category");
-  await mongoCategory.MainCategory.find((err, DataAttained) => {
+  await mongoCategory.MainCategory.find(async(err, DataAttained) => {
     // res.render("admin/Category")
     res.render("admin/Category", {
+      years:await years(),
       user: req.session.admin,
       category: DataAttained,
       success:req.query.success,
@@ -95,7 +126,7 @@ const EditCat=async(req,res)=>
 
 const Allcategory=await mongoCategory.MainCategory.find()
 
-  res.render("admin/managecat",{Allcategory:Allcategory})
+  res.render("admin/managecat",{years:await years(),Allcategory:Allcategory})
 }
 
 const OrderHelper=async (req,res)=>
@@ -104,7 +135,7 @@ const OrderHelper=async (req,res)=>
   const orderdetails=await MongoOrder.find()
 const quantity=await MongoOrder.aggregate([{$project:{products:1}},{$unwind:"$products"},{$group:{_id:'$_id',quantity:{$sum:"$products.Quantity"}}}])
 
-  res.render("admin/UserOrders",{order:orderdetails.reverse(),quantity:quantity})
+  res.render("admin/UserOrders",{order:orderdetails.reverse(),quantity:quantity ,years:await years()})
 }
 const EditCategory=async (req,res)=>
 {
@@ -112,7 +143,7 @@ const EditCategory=async (req,res)=>
 
   const category=await mongoCategory.MainCategory.findOne({_id:req.query.catid})
   console.log(category);
-  res.render("admin/EditCategory",{category:category})
+  res.render("admin/EditCategory",{years:await years(),category:category})
 }
 const updatecat=async (req,res)=>
 {

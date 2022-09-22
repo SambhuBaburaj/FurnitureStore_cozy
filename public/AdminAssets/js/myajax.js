@@ -401,7 +401,8 @@ function usercount(day)
 
       document.getElementById("usercount").innerHTML =
       response 
-    
+      document.getElementById("userday").innerHTML ="last "+
+      day+" days"
 
 
       // setTimeout(location.reload(), 5000);
@@ -427,7 +428,8 @@ function revenuecount(day)
       document.getElementById("revenue").innerHTML =
        response +" ₹"
     
-
+       document.getElementById("revenueday").innerHTML ="last "+
+       day+" days"
 
       // setTimeout(location.reload(), 5000);
     },
@@ -452,8 +454,8 @@ function totaloreders(day)
       document.getElementById("ordercount").innerHTML =
        response
     
-
-
+       document.getElementById("orderday").innerHTML ="last "+
+       day+" days"
       // setTimeout(location.reload(), 5000);
     },
   });
@@ -476,7 +478,8 @@ function cancelcount(day)
       document.getElementById("cancelcount").innerHTML =
        response
     
-
+       document.getElementById("numberday").innerHTML ="last "+
+       day+" days"
 
       // setTimeout(location.reload(), 5000);
     },

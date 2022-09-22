@@ -156,7 +156,12 @@ res.json(true)
 
 
 
+const wishlistView=async (req,res)=>
+{
+res.render("user/WishList",{ Category: await CategoryList()})
 
+
+}
 
 
 
@@ -178,5 +183,6 @@ module.exports = {
   ReturnProduct,
   addreessdelete,
   addressEditer,
-  updateaddress
+  updateaddress,
+  wishlistView
 };

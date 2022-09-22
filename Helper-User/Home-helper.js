@@ -13,8 +13,8 @@ const MongoCart=require("../Connections/UserSchema").CartData
 const MongoUserData=require("../Connections/UserSchema").user_data
 const MongoAddress=require("../Connections/UserSchema").address
 const MongoBanner=require("../Connections/UserSchema").BannerControl
-
-
+const MongoCoupons=require("../Connections/UserSchema").Coupons
+const MongoUsedCoupons=require("../Connections/UserSchema").CouponsUsed
 /* GET home page. */
 // const CategoryList=MongoCategory.find()
 
@@ -265,6 +265,11 @@ let quantity=0,TotalPrice=0,Price=0,Discount=0;
   
 })
 TotalPrice=Price-Discount
+if(req.session.coupon)
+{
+    TotalPrice=TotalPrice-req.session.coupon 
+}
+
 // console.log(Math.trunc(Price));
 //     console.log( Math.trunc(TotalPrice));
 //     console.log("sdi",Discount);
@@ -273,8 +278,8 @@ const CheckoutData={
 RealPrice:Math.trunc(Price),
 DisPrice:Math.trunc(TotalPrice),
 Quantity: Math.trunc(quantity),
-Discount:Math.trunc(Discount)
-
+Discount:Math.trunc(Discount),
+coupon:req.session.coupon
 
 }
 const user=await MongoUserData.findOne({email:req.session.user})
@@ -397,6 +402,106 @@ res.render("user/OrderPlaced",{Category:await CategoryList() ,orderID:OrderDetai
 
 }
 
+
+const ApplyCoupon=async(req,res)=>
+{
+
+
+    const UserId=await mongoConnection.user_data.findOne({email:req.session.user})
+
+
+
+
+
+var CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+Quantity:'$product.Quantity'}}, {
+  $lookup:{
+      from:'productdetails',
+      localField:'ItemId', 
+      foreignField:'_id',
+      as:'product'
+  }}, {$project:{
+    ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+}}])
+
+let TotalPrice=0
+
+
+
+CartProduct.forEach(function (CartItems)
+{
+
+
+   TotalPrice=TotalPrice+(CartItems.Quantity*( CartItems.product.Price-(CartItems.product.Price*CartItems.product.Discount/100)))
+  
+})
+
+
+
+const UsedCoupon=await MongoUsedCoupons.findOne({$and:[{user:UserId._id},{CouponsId:req.body.coupon}] })
+const allCoupons=await MongoCoupons.findOne({CouponsID:req.body.coupon})
+
+console.log(UsedCoupon);
+
+
+
+
+
+
+if(UsedCoupon)
+{
+ 
+    res.json({
+        status:"Used"
+    })
+}
+
+else if(allCoupons)
+{
+
+ if(allCoupons.Cap>TotalPrice)
+{
+ res.json({
+    status:"min",
+    cap:allCoupons.Cap
+ })
+}
+
+ else if (allCoupons.Cap<TotalPrice)
+{
+    
+
+  const discount= ( TotalPrice*allCoupons.Discount)/100
+const GrantTotal=TotalPrice-discount
+console.log(req.body.coupon);
+req.session.coupon=Math.round(discount)
+req.session.couponid=req.body.coupon;
+
+res.json({
+    status:"applied",
+    discount:Math.round(discount),
+    GrantTotal:Math.round(GrantTotal)
+})
+
+
+
+}
+}
+
+else
+{
+  
+        res.json({
+            status:"denied"
+        })
+  
+    }
+
+
+
+
+
+}
   
 
 module.exports={
@@ -409,5 +514,6 @@ module.exports={
     RemoveProduct,
     ClearCart,
     CheckOut,
-    OrderCheckout
+    OrderCheckout,
+    ApplyCoupon
 }  

@@ -1,0 +1,130 @@
+
+
+<%- include("partials/header") %> 
+
+
+
+
+
+    <div class="wrapper">
+        <div class="container-fluid">
+            <!-- Page-Title -->
+            <div class="page-title-box">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <h4 class="page-title">Coupons</h4>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-right">
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">COZY</a></li>
+                            <!-- <li class="breadcrumb-item"><a href="javascript:void(0);">Tables</a></li> -->
+                            <li class="breadcrumb-item active">coupons Table</li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- end row -->
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card m-b-30">
+                        <div class="card-body">
+                            <button onclick="location.href='/admin/addCoupons'" class="btn btn-success float-right">Add Coupons</button>
+                            <h4 class="mt-0 header-title">available Coupons</h4>
+                            <!-- <p class="sub-title">DataTables has most features enabled by
+                                default, so all you need to do to use it with your own tables is to call
+                                the construction function: <code>$().DataTable();</code>.
+                            </p> -->
+<br>
+                            <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th>coupons Codes</th>
+                                
+                                    <th>Description</th>
+                                    <th>Discount</th>
+                                    <th>OfferCap</th>
+                                    <th>Expire Date</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                                </thead>
+
+
+                                <tbody>
+
+<% locals.coupons.forEach((element)=>{ %>
+    <tr>
+        <td><%=element.CouponsID %></td>
+        <td><%=element.Desc%></td>
+        <td><%=element.Discount %></td>
+        <td><%=element.Cap%></td>
+
+        <td><%=element.ExpireDate.toDateString()%></td>
+
+
+        <td>
+            <div class="d-flex justify-content-around"">
+<a href=""><i class="fas fa-edit"></i></a>
+<a href=""><i class="fas fa-trash-alt"></i></a>
+<a href=""><i class="fas fa-chart-line"></i></a>
+            </div>
+        </td>
+
+      
+    </tr>
+
+
+
+<% }) %> 
+                          
+                                
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+
+      
+    <!-- end wrapper -->
+
+    <!-- Footer -->
+    <footer class="footer">
+     <span class="d-none d-sm-inline-block"> - Crafted with <i class="mdi mdi-heart text-danger"></i> by SB</span>.
+    </footer>
+
+    <!-- End Footer -->
+
+    <!-- jQuery  -->
+    <script src="/assetsAdmin/js/jquery.min.js"></script>
+    <script src="/assetsAdmin/js/bootstrap.bundle.min.js"></script>
+    <script src="/assetsAdmin/js/jquery.slimscroll.js"></script>
+    <script src="/assetsAdmin/js/waves.min.js"></script>
+
+    <!-- Required datatable js -->
+    <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="../plugins/datatables/dataTables.buttons.min.js"></script>
+    <script src="../plugins/datatables/buttons.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables/jszip.min.js"></script>
+    <script src="../plugins/datatables/pdfmake.min.js"></script>
+    <script src="../plugins/datatables/vfs_fonts.js"></script>
+    <script src="../plugins/datatables/buttons.html5.min.js"></script>
+    <script src="../plugins/datatables/buttons.print.min.js"></script>
+    <script src="../plugins/datatables/buttons.colVis.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="../plugins/datatables/dataTables.responsive.min.js"></script>
+    <script src="../plugins/datatables/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="/assetsAdmin/pages/datatables.init.js"></script>  
+
+    <!-- App js -->
+    <script src="/assetsAdmin/js/app.js"></script>
+
+</body>
+
+</html>

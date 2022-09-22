@@ -5,6 +5,25 @@ const multer = require('multer');
 const MongoOrder=require("../Connections/UserSchema").OrderDetails
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
+const MongoCoupons=require("../Connections/UserSchema").Coupons
+
+
+async function years()
+{
+
+
+    const years=await MongoOrder.aggregate([{$match:{$and:[{CancelOrder:0},{DeliveryStatus:"delivered"}]}   },{$project:{year:{$year:"$realDate"},TotalAmount:1}},{$group:{_id:'$year',sum:{$sum:'$TotalAmount'}}},{$sort:{_id:-1}}])
+
+
+    let y=0,count=0,yearcount=[]
+    
+  for(i=0;i<years.length;i++)
+  {
+    yearcount[i]=years[i]._id
+  }
+  return yearcount
+
+}
 
 
 
@@ -75,6 +94,57 @@ res.json(true)
 }
 
 
+const Couponsview=async (req,res)=>
+{
 
-module.exports={OrderStatus,
+
+  const Coupons=await MongoCoupons.find()
+  console.log(Coupons);
+    res.render('admin/CouponsControl',{years:await years(),coupons:Coupons})
+}
+
+
+
+const addCoupons=async (req,res)=>
+{
+
+
+res.render('admin/addcoupones',{years:await years()})
+
+
+
+
+}
+
+
+
+
+const SaveCoupons=(req,res)=>
+{
+
+console.log(req.body);
+
+var today = new Date();
+var expire = new Date();
+expire.setDate(today.getDate()+parseInt( req.body.Expire));
+
+
+const coupons = new MongoCoupons({
+
+    CouponsID:req.body.coupone,
+    ExpireDate:expire,
+    Discount:req.body.Discount,
+    Desc:req.body.desc,
+Cap:req.body.Cap
+
+
+  }); 
+  coupons.save();
+
+
+res.redirect("/admin/CuponsControl")
+
+}
+
+module.exports={OrderStatus,Couponsview,addCoupons,SaveCoupons
    }

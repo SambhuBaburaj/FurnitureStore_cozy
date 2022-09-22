@@ -26,5 +26,9 @@ const StoreCategory=new mongoose.Schema({
 })
 const Products=mongoose.model("ProductDetails",StoreCategory)
 
+
+
+
+
 module.exports = {MainCategory,
 Products}

@@ -21,12 +21,12 @@ paypal.configure({
 /* GET home page. */
 
 
-// router.use((req, res, next) => {
+router.use((req, res, next) => {
 
-//   req.session.user="sambhubaburaj007@gmail.com"
-//   next()
+  req.session.user="sambhubaburaj007@gmail.com"
+  next()
 
-//  })
+ })
 
 
 
@@ -107,7 +107,9 @@ router.get("/ProductSingle",ProductHelper.ViewSingle,(req,res)=>
 
 router.get("/AddCart",(req,res,next)=>//must add session check
 {
- 
+  req.session.coupon=null
+  req.session.couponid=null
+  
 
   return new Promise(async (resolve, reject) => {
     // req.session.user="sambhubaburaj007@gmail.com"
@@ -263,4 +265,14 @@ router.post("/DeleteAddress",ProfileHelper.addreessdelete)
 router.get("/editAddress",ProfileHelper.addressEditer)
 
 router.post("/saveupdateAddress",ProfileHelper.updateaddress)
+router.post("/ApplyCoupon",ProductHelper.ApplyCoupon)
+
+router.get("/MyWishlist",ProfileHelper.wishlistView)
+
+
+
+
+
+
+
 module.exports = router    
