@@ -305,20 +305,55 @@
                                                 <span class="new">New</span>
                                             </span>
                                             <div class="actions">
-                                                <a href="wishlist.html" class="action wishlist" title="Wishlist"><i
-                                                        class="icon-heart"></i></a>
+<% if(!locals.wishlist) {%> 
+
+  
+
+                                                    <a onclick="WishList('<%=Product._id%>',1)" class="action wishlist" title="Wishlist"><i  id="<%=Product._id%>"
+                                                    class="fa fa-heart"></i></a>
+
+
+
+<%} else{%>
+                                                <% let wish %> 
+                                                <% locals.wishlist.forEach(element => { %>
+                                                    
+
+<% if(element.toString()==Product._id ) { %>
+    <% wish=true  %>
+    <% console.log(wish) %> 
+
+<% } %> 
+                                                    
+                                                <% }); %> 
+
+                                                <% if(!wish){%>
+
+
+                                                    <a onclick="WishList('<%=Product._id%>',1)" class="action wishlist" title="Wishlist"><i  id="<%=Product._id%>"
+                                                    class="fa fa-heart"></i></a>
+
+                                               <%} else {%>
+                                                <% console.log(wish) %> 
+                                                <a onclick="WishList('<%=Product._id%>',0)" class="action wishlist" title="Wishlist"><i id="<%=Product._id%>"
+                                                    style="color: red;" class="fa fa-heart"></i></a>
+                                                    <% wish=false %> 
+                                                <% } %> 
+                                             
+                                                <% } %>        
                                                 <a href="#" class="action quickview" data-link-action="quickview" title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal"><i
                                                         class="icon-size-fullscreen"></i></a>
-                                                <a href="compare.html" class="action compare" title="Compare"><i
-                                                        class="icon-refresh"></i></a>
+                                           
                                             </div>
-                                            <button title="Add To Cart" class=" add-to-cart">Add
+                                            <button  onclick="location.href='/AddCart?ProductId='+'<%=Product._id %>'" title="Add To Cart" class=" add-to-cart">Add
                                                 To Cart</button>
-                                        </div>
+                                        </div> 
                                         <div class="content">
                                             <h5 class="title"><a href="shop-left-sidebar.html"><%= Product.ProductName  %>  </a></h5>
                                             <span class="price">
-                                                <span class="new">₹ <%= Product.Price  %></span>
+                                                <span class="new">₹ <%=Math.round(Product.Price-(Product.Price*Product.Discount)/100)%></span>
+                                                <span class="old">₹<%=Math.round(Product.Price)%></span>
+                                                <p  style="font-weight: 800; font-size: small; color: rgb(52, 252, 52);" class="">&emsp;<%=Product.Discount  %> <span style="font-weight: 800;"> % off </span></p>
                                             </span>
                                         </div>
                                     </div>
@@ -685,6 +720,9 @@
 
     <!-- Main Js -->
     <script src="assets/js/main.js"></script>
+    
+    <script src="assets/js/userajax.js"></script>
+
 </body>
 
 </html>

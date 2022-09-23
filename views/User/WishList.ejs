@@ -14,59 +14,33 @@
                                         <th>Image</th>
                                         <th>Product Name</th>
                                         <th>Until Price</th>
-                                        <th>Qty</th>
-                                        <th>Subtotal</th>
+                                        <th>action</th>
+                            
                                         <th>Add To Cart</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <% let TotalPrice=0 %>
+                                    <% let totalQ=0,Price=0 %>
+                                    <% locals.wishlist.forEach(element => { %>
+                                          <tr>
                                         <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-3" src="assets/images/product-image/1.jpg" alt="" /></a>
+                                            <a href="#"><img class="img-responsive ml-3" src="/AdminAssets/images/addProduct/<%=element.product.Images[0]  %>"alt="" /></a>
                                         </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$60.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$70.00</td>
+                                        <td class="product-name"><a href="#"><%=element.product.ProductName%></a></td> 
+                                          <td class="product-price-cart"><p>₹<%= Math.round(element.product.Price-(element.product.Price*element.product.Discount/100))%></p><span class="amount"><del style="color:grey">₹<%= element.product.Price%></del></span><p style="color: rgb(29, 247, 29);"><%= element.product.Discount%>% Off</p></td>
+                                        
                                         <td class="product-wishlist-cart">
-                                            <a href="#">add to cart</a>
+                                            <a href="" onclick="removewish('<%=element.product._id %>')">remove</a>
+                                        </td>
+                  
+                                        <td class="product-wishlist-cart">
+                                            <a  onclick="location.href='/AddCart?ProductId='+'<%=element.product._id %>'" >add to cart</a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-3" src="assets/images/product-image/2.jpg" alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$50.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$80.00</td>
-                                        <td class="product-wishlist-cart">
-                                            <a href="#">add to cart</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img class="img-responsive ml-3" src="assets/images/product-image/3.jpg" alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$70.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$90.00</td>
-                                        <td class="product-wishlist-cart">
-                                            <a href="#">add to cart</a>
-                                        </td>
+
+                                  <%  }); %> 
+                                    
                                     </tr>
                                 </tbody>
                             </table>
@@ -82,6 +56,7 @@
 <%- include('partials/footer') %>
 <script src="assets/js/vendor/vendor.min.js"></script>
 <script src="assets/js/plugins/plugins.min.js"></script>
+<script src="assets/js/userajax.js"></script>
 
 <!-- Main Js -->
 <script src="assets/js/main.js"></script>

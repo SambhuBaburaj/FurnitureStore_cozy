@@ -30,6 +30,39 @@ var instance = new Razorpay({
 });
 
 
+async function cartdata(user)
+{
+    console.log(user);
+    const UserId=await MongoUserData.findOne({email:user});
+
+   if(UserId)
+   {
+  // console.log(UserId._id);
+  cartDetails=await MongoCart.findOne({UserId:UserId._id})
+    
+    
+  //  const ProductId=cartDetails.product;
+  //  const MatchCartUserId=await MongoCart.aggregate([{$match:{UserId:UserId._id}}])
+   
+   
+   const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+   Quantity:'$product.Quantity'}}, {
+     $lookup:{
+         from:'productdetails',
+         localField:'ItemId', 
+         foreignField:'_id',
+         as:'product'
+     }}, {$project:{
+       ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+   }}])
+console.log(CartProduct);
+return CartProduct
+   }
+   else 
+   return [];
+  
+}
+
 
 const paypal = require('paypal-rest-sdk');
  
@@ -367,7 +400,7 @@ const PaypalOrderPlaced=async(req,res)=>
   
       res.render("user/OrderPlaced", {
         Category: await CategoryList(),
-        orderID: OrderDetails._id,
+        orderID: OrderDetails._id,cartdata:await cartdata(req.session.user)
       });
     
 
@@ -610,7 +643,7 @@ const razersuccess=async (req,res)=>
 
     res.render("user/OrderPlaced", {
       Category: await CategoryList(),
-      orderID: OrderDetails._id,
+      orderID: OrderDetails._id,cartdata:await cartdata(req.session.user)
     });
   
 

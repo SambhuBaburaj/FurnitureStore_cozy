@@ -12,6 +12,7 @@ const ProductStore=require("../Connections/AdminSchema").Products
 const CC = require("currency-converter-lt");
 const paypal = require('paypal-rest-sdk');
 const { OrderHelper } = require("../Helper-Admin/CategoryManagement");
+const session = require("express-session");
  
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
@@ -21,15 +22,49 @@ paypal.configure({
 /* GET home page. */
 
 
-router.use((req, res, next) => {
+// router.use((req, res, next) => {
 
-  req.session.user="sambhubaburaj007@gmail.com"
-  next()
+//   req.session.user="sambhubaburaj007@gmail.com"
+//   next()
+ 
+//  })
 
- })
 
 
-
+ async function cartdata(user)
+ {
+     console.log(user);
+     const UserId=await MongoUserData.findOne({email:user});
+ 
+    if(UserId)
+    {
+   // console.log(UserId._id);
+   cartDetails=await MongoCart.findOne({UserId:UserId._id})
+     
+     
+   //  const ProductId=cartDetails.product;
+   //  const MatchCartUserId=await MongoCart.aggregate([{$match:{UserId:UserId._id}}])
+    
+    
+    const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+    Quantity:'$product.Quantity'}}, {
+      $lookup:{
+          from:'productdetails',
+          localField:'ItemId', 
+          foreignField:'_id',
+          as:'product'
+      }}, {$project:{
+        ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+    }}])
+ console.log(CartProduct);
+ return CartProduct
+    }
+    else 
+    return [];
+   
+ }
+ 
+ 
  const CategoryList=async()=>
 
  {
@@ -38,13 +73,13 @@ router.use((req, res, next) => {
 
 
 
-router.get("/",ProductHelper.GetProduct,function (req, res, next) {
+router.get("/",ProductHelper.GetProduct,async function (req, res, next) {
 
  
 });
 
-router.get("/UserLogin",UserHelper.LoginSession, (req, res) => {
-  res.render("user/User-login",{Category:CategoryList});
+router.get("/UserLogin",UserHelper.LoginSession, async (req, res) => {
+  res.render("user/User-login",{Category:CategoryList,cartdata:await cartdata(req.session.user)});
 });
  
 
@@ -63,13 +98,13 @@ router.get("/headline",(req,res)=>
 
 router.get("/UserLogout",UserHelper.Logout,async(req,res)=>
 {
- res.render("user/User-login",{logout:"logout Success",Category:await CategoryList()}) 
+ res.render("user/User-login",{logout:"logout Success",Category:await CategoryList(),cartdata:await cartdata(req.session.user)}) 
 })
 
 router.get("/LoginOTP",async(req,res)=>
 {
 
-res.render("user/OTPnumber",{Category:await CategoryList()})
+res.render("user/OTPnumber",{Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
 
 })
 
@@ -164,7 +199,7 @@ console.log(req.query,"sfiuajr");
 
      res.render("user/OrderPlaced", {
       Category: await CategoryList(),
-      orderID: req.query.data,
+      orderID: req.query.data,cartdata:await cartdata(req.session.user)
     });
     next()
 })
@@ -267,11 +302,84 @@ router.get("/editAddress",ProfileHelper.addressEditer)
 router.post("/saveupdateAddress",ProfileHelper.updateaddress)
 router.post("/ApplyCoupon",ProductHelper.ApplyCoupon)
 
-router.get("/MyWishlist",ProfileHelper.wishlistView)
+router.get("/MyWishlist",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},ProfileHelper.wishlistView)
+
+router.post("/WishList",(req,res,next)=>
+{
+
+
+ 
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+    return new Promise(async (resolve, reject) => {
+      // req.session.user="sambhubaburaj007@gmail.com"
+  
+  if(!req.session.user) 
+  {
+res.json(
+{status:'invlid'}
+
+)
+  }
+else
+{
+
+  next()
+}
+  
+
+  
+ 
+   
+  
+    }) 
+},ProfileHelper.WishListControl)
 
 
 
+router.post("/removewish",(req,res,next)=>//must add session check
+{
 
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.json(
+    {status:'invlid'}
+    
+    )
+     
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},ProfileHelper.removewish
+
+)
 
 
 

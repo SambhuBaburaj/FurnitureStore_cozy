@@ -7,6 +7,7 @@ const { response } = require("express");
 const { ObjectId } = require("mongodb");
 const { json } = require("body-parser");
 const { TrustProductsChannelEndpointAssignmentContext } = require("twilio/lib/rest/trusthub/v1/trustProducts/trustProductsChannelEndpointAssignment");
+const e = require("express");
 const ProductStore=require("../Connections/AdminSchema").Products
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
@@ -15,8 +16,46 @@ const MongoAddress=require("../Connections/UserSchema").address
 const MongoBanner=require("../Connections/UserSchema").BannerControl
 const MongoCoupons=require("../Connections/UserSchema").Coupons
 const MongoUsedCoupons=require("../Connections/UserSchema").CouponsUsed
+const MongoWishList=require("../Connections/UserSchema").UserWishlist
+
+
 /* GET home page. */
 // const CategoryList=MongoCategory.find()
+
+async function cartdata(user)
+{
+    console.log(user);
+    const UserId=await MongoUserData.findOne({email:user});
+
+   if(UserId)
+   {
+  // console.log(UserId._id);
+  cartDetails=await MongoCart.findOne({UserId:UserId._id})
+    
+    
+  //  const ProductId=cartDetails.product;
+  //  const MatchCartUserId=await MongoCart.aggregate([{$match:{UserId:UserId._id}}])
+   
+   
+   const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+   Quantity:'$product.Quantity'}}, {
+     $lookup:{
+         from:'productdetails',
+         localField:'ItemId', 
+         foreignField:'_id',
+         as:'product'
+     }}, {$project:{
+       ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+   }}])
+console.log(CartProduct);
+return CartProduct
+   }
+   else 
+   return [];
+  
+}
+
+
 
 const CategoryList=async()=>
 
@@ -24,7 +63,7 @@ const CategoryList=async()=>
    return await MongoCategory.find()
 }
 
-
+let wishlist
 const GetProduct=async(req,res,next)=>
 {
   
@@ -32,10 +71,33 @@ const ProductList=await ProductStore.find();
 const listofcat=await CategoryList()
 const length=(await CategoryList()).length;
 console.log(length);
-
 const banner=await MongoBanner.find()
 
-res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner});
+if(req.session.user){
+
+
+const user =await MongoUserData.findOne({email:req.session.user})
+
+ wishlist=await MongoWishList.findOne({UserId:user._id})
+
+}
+else{
+    wishlist=[0] 
+}
+
+
+if(!wishlist)
+{
+
+    res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:null,cartdata:await cartdata(req.session.user)});
+ 
+} 
+
+else{
+    res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:wishlist.Products,cartdata:await cartdata(req.session.user)});
+
+}
+
 next();
 }
 
@@ -49,7 +111,7 @@ const SubCat=req.query.SubCat
 const data=await ProductStore.find({$and:[{Category:MainCat},{SubCategory:SubCat}]})
 // console.log(data);
 // NewPrice=Math.trunc(data.Price-(Data.Price*data.Discount)/100)
-    res.render("user/ProductBrowse",{Category:await CategoryList(),Product:data})
+    res.render("user/ProductBrowse",{Category:await CategoryList(),Product:data,cartdata:await cartdata(req.session.user)})
 
 next()
 } 
@@ -62,7 +124,17 @@ SingleProductData=await ProductStore.findOne({_id:req.query.id})
 // console.log(SingleProductData);
 NewPrice=Math.trunc(SingleProductData.Price-(SingleProductData.Price*SingleProductData.Discount)/100)
 // console.log(NewPrice);
-    res.render("user/SingleProduct",{Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice})
+if(req.session.user)
+{
+    const user =await MongoUserData.findOne({email:req.session.user})
+    
+     wishlist=await MongoWishList.findOne({UserId:user._id})
+
+}
+else{
+    wishlist=[0]
+} 
+    res.render("user/SingleProduct",{Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
 
 }
 
@@ -73,6 +145,8 @@ NewPrice=Math.trunc(SingleProductData.Price-(SingleProductData.Price*SingleProdu
 
 const AddToCart= async(req,res,next)=>
 {
+
+    console.log(req.params);
 //  console.log(req.query.ProductId);
 //  console.log(req.session.user);
 if(!req.query.ProductId)
@@ -178,7 +252,7 @@ next()
      ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
  }}])
 //  console.log(CartProduct);
-   res.render("user/Cart",{Category:await CategoryList(),CartItem:CartProduct})
+   res.render("user/Cart",{Category:await CategoryList(),CartItem:CartProduct,cartdata:await cartdata(req.session.user)})
  } 
 
 //  quantity control.................
@@ -233,11 +307,11 @@ res.redirect("/AddCart")
 }
 
 const CheckOut=async(req,res)=>
-{
+{ 
     // console.log(req.session.user);
     const UserId=await MongoUserData.findOne({email:req.session.user});
     cartDetails=await MongoCart.findOne({UserId:UserId._id})
-    
+     
      
  const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
  Quantity:'$product.Quantity'}}, {
@@ -294,7 +368,7 @@ if(quantity==0)
 }
 else
 {
-    res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData,address:address})
+    res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user)})
 }
 } 
 
@@ -395,7 +469,7 @@ await MongoCart.deleteOne({UserId:user._id}, function (error, success) {
     } else {
 console.log(success);
     }}).clone()
-res.render("user/OrderPlaced",{Category:await CategoryList() ,orderID:OrderDetails._id});
+res.render("user/OrderPlaced",{Category:await CategoryList() ,orderID:OrderDetails._id,cartdata:await cartdata(req.session.user)});
 
 }
 
@@ -436,7 +510,7 @@ CartProduct.forEach(function (CartItems)
   
 })
 
-
+ 
 
 const UsedCoupon=await MongoUsedCoupons.findOne({$and:[{user:UserId._id},{CouponsId:req.body.coupon}] })
 const allCoupons=await MongoCoupons.findOne({CouponsID:req.body.coupon})

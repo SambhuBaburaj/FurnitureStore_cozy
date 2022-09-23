@@ -409,3 +409,75 @@ response.discount+"₹"
   });
 
 } 
+
+function WishList(product,value)
+{
+  event.preventDefault()
+
+  $.ajax({ 
+    type: "post",
+    url: "/WishList",
+    data: {
+      product:product,
+      value:value
+    },
+    dataType: "json",
+    success: (response) => {
+     console.log(response);
+if(response.status=="invlid")
+{
+  location.href="/UserLogin"
+
+}
+
+     if(response.status=="false")
+     {
+      document.getElementById(product).style.color = "red";  
+
+     }
+      else if(response.status=="true")
+      {
+        document.getElementById(product).style.color = "";  
+
+      }
+   
+    }
+    ,
+  });
+}
+
+
+function addtocart(ProductId){
+ event.preventDefault()
+ $.ajax({
+  type: "post",
+  url: "/addtocart",
+  data: {
+    ProductId:ProductId
+  },
+  dataType: "json",
+  success: (response) => {
+    if(response)
+    document.getElementById(product).style.color = "red";  
+    else
+    document.getElementById(product).style.color = "";  
+  },
+});
+}
+function removewish(ProductId)
+{
+
+  event.preventDefault()
+  $.ajax({
+   type: "post",
+   url: "/removewish",
+   data: {
+     ProductId:ProductId
+   },
+   dataType: "json",
+   success: (response) => {
+
+    location.reload()
+   },
+ });
+}

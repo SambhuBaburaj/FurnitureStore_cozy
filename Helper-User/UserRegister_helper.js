@@ -4,6 +4,41 @@ const session = require("express-session");
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 
+
+
+async function cartdata(user)
+{
+    console.log(user);
+    const UserId=await MongoUserData.findOne({email:user});
+
+   if(UserId)
+   {
+  // console.log(UserId._id);
+  cartDetails=await MongoCart.findOne({UserId:UserId._id})
+    
+    
+  //  const ProductId=cartDetails.product;
+  //  const MatchCartUserId=await MongoCart.aggregate([{$match:{UserId:UserId._id}}])
+   
+   
+   const CartProduct=await MongoCart.aggregate([{$match:{UserId:UserId._id}},{$unwind:'$product'},{$project:{ItemId:'$product.ItemId',
+   Quantity:'$product.Quantity'}}, {
+     $lookup:{
+         from:'productdetails',
+         localField:'ItemId', 
+         foreignField:'_id',
+         as:'product'
+     }}, {$project:{
+       ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
+   }}])
+console.log(CartProduct);
+return CartProduct
+   }
+   else 
+   return [];
+  
+}
+
 const CategoryList=async()=>
 
 {
@@ -46,7 +81,7 @@ const New_user = async (req, res) => {
   });
   console.log(req.body.user_email);
   if (duplicate) {
-    res.render("user/User-login", { duplicate: "email already exist" });
+    res.render("user/User-login", { duplicate: "email already exist" ,cartdata:await cartdata(req.session.user)});
   } else {
 
     const hashed = await secure_password(req.body.user_password);
@@ -60,7 +95,7 @@ const New_user = async (req, res) => {
       date:new Date()
     }); 
     new_user.save();
-    res.render("user/User-login",{logout:"account created",Category:await CategoryList()})
+    res.render("user/User-login",{logout:"account created",Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
   }
 };
 
@@ -106,13 +141,13 @@ console.log(req.session.returnto);
   } else {
     res.render("user/User-login", {
       title: "express",
-      duplicate: "email/password is incorrect",Category:await CategoryList()
+      duplicate: "email/password is incorrect",Category:await CategoryList(),cartdata:await cartdata(req.session.user)
     });
   } 
 } else { 
   res.render("user/User-login", {
     title: "express",
-    duplicate: "email/password is incorrect",Category:await CategoryList()
+    duplicate: "email/password is incorrect",Category:await CategoryList(),cartdata:await cartdata(req.session.user)
 
   });
 }
@@ -144,7 +179,7 @@ const NumberVerification =async(req,res,next)=>
     .verifications
     .create({to:'+91'+MobileNumber, channel: 'sms'})
     .then(async(verification) => {
-    res.render("user/OtpConfirm",{number:MobileNumber,Category:await CategoryList()})
+    res.render("user/OtpConfirm",{number:MobileNumber,Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
     })
     .catch((err)=>console.log("its an error",err));
 }
@@ -152,7 +187,7 @@ const NumberVerification =async(req,res,next)=>
    
   else
   {
-res.render("user/OTPnumber",{wrongnumber:"entered number does not exist"})
+res.render("user/OTPnumber",{wrongnumber:"entered number does not exist",cartdata:await cartdata(req.session.user)})
 
   }
 next()
@@ -179,7 +214,7 @@ const OtpValidation=(req,res,next)=>
         }else{
  console.log("its not working");
 
-res.render("user/OtpConfirm",{otpvalue:"invalid OTP"})
+res.render("user/OtpConfirm",{otpvalue:"invalid OTP",cartdata:await cartdata(req.session.user)})
          next()
         }
        })

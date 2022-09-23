@@ -95,8 +95,8 @@ const CouponsUsed=mongoose.model("Used_Coupons",UsedCoupons)
 
 
 const wishList=new mongoose.Schema({
-UserId:String,
-Products:Array
+UserId: mongoose.ObjectId,
+Products:[mongoose.ObjectId]
 
 })
 
