@@ -102,7 +102,22 @@ Products:[mongoose.ObjectId]
 
 const UserWishlist=mongoose.model("UserWishlist",wishList)
 
+const wallet=new mongoose.Schema({
+userId:mongoose.ObjectId,
+balance:Number
+
+})
+const UserWallet=mongoose.model("UserWallet",wallet)
 
 
+ const walhis=new mongoose.Schema({
+  UserId:mongoose.ObjectId,
+date:Date,
+type:String,
+details:String,
+Amount:Number,
+orderId:mongoose.ObjectId
+ })
+const WalletHistory=mongoose.model("WalletHistory",walhis)
 
-  module.exports = {user_data,CartData,OrderDetails,address,BannerControl,Coupons,CouponsUsed,UserWishlist}
+  module.exports = {user_data,CartData,OrderDetails,address,BannerControl,Coupons,CouponsUsed,UserWishlist,UserWallet,WalletHistory}

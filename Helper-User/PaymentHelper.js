@@ -22,6 +22,7 @@ const MongoUserData = require("../Connections/UserSchema").user_data;
 const MongoAddress = require("../Connections/UserSchema").address;
 const MongoUsedCoupons=require("../Connections/UserSchema").CouponsUsed
 
+const mongoWallet=require("../Connections/UserSchema").UserWallet
 
 
 var instance = new Razorpay({
@@ -83,7 +84,7 @@ const CategoryList = async () => {
 
 const OrderCheckout = async (req, res) => {
 
-console.log('im here');
+console.log(req.session.couponid);
   console.log(req.body);
     req.session.address=req.body
   const UserId = await MongoUserData.findOne({ email: req.session.user });
@@ -196,22 +197,26 @@ if(req.session.coupon)
     OrderDetails.save(function (err, room) {
       var newRoomId = room._id;
 
-      // console.log("room",newRoomId);
+      
     });
-console.log("lshgsdvkfxusermvdfn;js         ",req.session.Coupons);
-
-const coupon=new MongoUsedCoupons({
-
-
-  user:UserId._id,
-  CouponsId:req.session.couponid,
-  Date:new Date(),
-  Discount:req.session.coupon
+    console.log("itm the here");
+    console.log(req.session.Coupons);
+if(req.session.couponid)
+{
+  const coupon=new MongoUsedCoupons({
 
 
-})
-coupon.save()
-
+    user:UserId._id,
+    CouponsId:req.session.couponid,
+    Date:new Date(),
+    Discount:req.session.coupon
+  
+  
+  })
+  coupon.save()
+  
+  
+}
 
 
     await MongoCart.deleteOne({ UserId: user._id }, function (error, success) {
@@ -279,8 +284,137 @@ instance.orders.create(options, function(err, order) {
   // total:TotalPrice})
 
 }
+// wallet...............................................................
+else if(details.delivery == "wallet")
+{
+  const UserId = await MongoUserData.findOne({ email: req.session.user });
+ 
+const wallet=await mongoWallet.findOne({userId:UserId._id})
 
 
+cartDetails = await MongoCart.findOne({ UserId: UserId._id });
+  
+var CartProduct = await MongoCart.aggregate([
+  { $match: { UserId: UserId._id } },
+  { $unwind: "$product" },
+  { $project: { ItemId: "$product.ItemId", Quantity: "$product.Quantity" } },
+  {
+    $lookup: {
+      from: "productdetails",
+      localField: "ItemId",
+      foreignField: "_id",
+      as: "product",
+    },
+  },
+  {
+    $project: {
+      ItemId: 1,
+      Quantity: 1,
+      product: { $arrayElemAt: ["$product", 0] },
+    },
+  },
+]);
+
+let TotalPrice = 0, TotalQuantity=0 ;
+
+CartProduct.forEach(function (CartItems) {
+  TotalPrice =
+  TotalPrice +
+ ( CartItems.Quantity * (CartItems.product.Price -
+  (CartItems.product.Price * CartItems.product.Discount) / 100));
+  TotalQuantity=TotalQuantity+ CartItems.Quantity
+});
+if(req.session.coupon)
+{
+
+  TotalPrice=TotalPrice-req.session.coupon;
+
+}
+
+if(wallet.balance>TotalPrice)
+{
+
+
+  const OrderDetails = new mongoConnection.OrderDetails({
+    DeliveryDetails: Address,
+
+    userId: user._id,
+    date: new Date().toDateString(),
+    realDate: new Date(),
+    products: ProductData,
+    status: "Order Placed",
+    PaymentMethode: details.delivery,
+    PaymentStatus: "Success",
+    DeliveryStatus: "pending",
+    TotalAmount: Math.round(TotalPrice),
+    paymentMethod: "wallet",
+    TotalQuantity:TotalQuantity,
+    CancelOrder: 0,
+  });
+  OrderDetails.save(function (err, room) {
+    var newRoomId = room._id;
+
+    
+  });
+
+ mongoWallet.updateOne({userId:UserId._id},{$inc:{balance:-(Math.round(TotalPrice))}},(e,s)=>
+{
+  if(e)
+  console.log(e);
+  else 
+  console.log(s);
+})
+  console.log(req.session.Coupons);
+if(req.session.couponid)
+{
+
+const coupon=new MongoUsedCoupons({
+
+
+  user:UserId._id,
+  CouponsId:req.session.couponid,
+  Date:new Date(),
+  Discount:req.session.coupon
+
+
+})
+coupon.save()
+
+
+}
+
+
+  await MongoCart.deleteOne({ UserId: user._id }, function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(success);
+    }
+  }).clone();
+
+
+  res.json( {
+    name:"wallet",
+    id:OrderDetails._id,
+  total:TotalPrice})
+
+
+
+
+
+
+}
+else{
+  res.json({
+    name:"no balance"
+  
+  }
+  )
+
+}
+
+
+}
 
 
 
@@ -351,10 +485,6 @@ const PaypalOrderPlaced=async(req,res)=>
     const user = await mongoConnection.user_data.findOne({
         email: req.session.user,
       });
-      // console.log(user._id);
-      // console.log(await MongoCart.find({UserId:user._id}));
-    
-      // console.log(Address);
       const ProductData = await MongoCart.aggregate([
         { $match: { UserId: user._id } },
         { $unwind: "$product" },
@@ -389,6 +519,25 @@ const PaypalOrderPlaced=async(req,res)=>
         // console.log("room",newRoomId);
       });
   
+      if(req.session.couponid)
+      {
+        const coupon=new MongoUsedCoupons({
+      
+      
+          user:UserId._id,
+          CouponsId:req.session.couponid,
+          Date:new Date(),
+          Discount:req.session.coupon
+        
+        
+        })
+        coupon.save()
+        
+        
+      }
+
+
+
       await MongoCart.deleteOne({ UserId: user._id }, function (error, success) {
         if (error) {
           console.log(error);
@@ -631,6 +780,27 @@ const razersuccess=async (req,res)=>
 
       // console.log("room",newRoomId);
     });
+
+    if(req.session.couponid)
+    {
+      const coupon=new MongoUsedCoupons({
+    
+    
+        user:UserId._id,
+        CouponsId:req.session.couponid,
+        Date:new Date(),
+        Discount:req.session.coupon
+      
+      
+      })
+      coupon.save()
+      
+      
+    }
+
+
+
+
 
     await MongoCart.deleteOne({ UserId: user._id }, function (error, success) {
       if (error) {

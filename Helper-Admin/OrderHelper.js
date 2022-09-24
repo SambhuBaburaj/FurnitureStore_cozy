@@ -5,9 +5,10 @@ const multer = require('multer');
 const MongoOrder=require("../Connections/UserSchema").OrderDetails
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
+const { DependentPhoneNumberInstance } = require("twilio/lib/rest/api/v2010/account/address/dependentPhoneNumber");
 const MongoCoupons=require("../Connections/UserSchema").Coupons
-
-
+const mongoWallet=require("../Connections/UserSchema").UserWallet
+const mongowalhis=require("../Connections/UserSchema").WalletHistory
 async function years()
 {
 
@@ -146,5 +147,38 @@ res.redirect("/admin/CuponsControl")
 
 }
 
-module.exports={OrderStatus,Couponsview,addCoupons,SaveCoupons
+
+const RefundApprove=async (req,res)=>
+{
+  console.log(req.body);
+const order=await MongoOrder.findOne({_id:ObjectId(req.body.order) })
+console.log(order);
+
+const walletHistory=new mongowalhis({
+  UserId:order.userId,
+  date:new Date(),
+type:"debit",
+details:"product refund",
+Amount:order.TotalAmount,
+orderId:order._id
+})
+
+walletHistory.save()
+mongoWallet.updateOne({id:ObjectId(req.body.order)},{$inc:{balance:order.TotalAmount}},(s,e)=>{
+  if(s)
+  console.log(s)
+  else
+  console.log(e);
+})
+MongoOrder.updateOne({_id:ObjectId(req.body.order)},{$set:{PaymentStatus:"refunded"}},(s,e)=>{
+  if(s)
+  console.log(s)
+  else
+  console.log(e);
+})
+res.json(true)
+
+}
+
+module.exports={OrderStatus,Couponsview,addCoupons,SaveCoupons,RefundApprove
    }

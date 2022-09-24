@@ -22,15 +22,15 @@ paypal.configure({
 /* GET home page. */
 
 
-// router.use((req, res, next) => {
+router.use((req, res, next) => {
 
-//   req.session.user="sambhubaburaj007@gmail.com"
-//   next()
+  req.session.user="sambhubaburaj007@gmail.com"
+  next()
  
-//  })
+ })
 
 
-
+ 
  async function cartdata(user)
  {
      console.log(user);
@@ -380,6 +380,15 @@ else
 },ProfileHelper.removewish
 
 )
+router.get("/WalletHistory",(req,res,next)=>
+{
+next()
+},ProfileHelper.WalletHistory)
+
+
+
+
+
 
 
 

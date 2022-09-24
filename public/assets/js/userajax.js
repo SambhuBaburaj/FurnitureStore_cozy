@@ -204,7 +204,18 @@ $("#placeOrder").submit((event) => {
       } else if (response.name == "paypal") {
         console.log("yesim here");
         window.location.href = "/paypalpay";
-      } else if (response.notes.key1 == "razerpay") {
+      } 
+      else if(response.name == "no balance")
+      {
+swal("inefficient balnce")
+      }
+      else if(response.name == "wallet")
+      {
+        location.href = "/CODOrderSuccess?data=" + response.id;
+      }
+
+
+      else if (response.notes.key1 == "razerpay") {
         razorpayPayment(response);
       }
     },

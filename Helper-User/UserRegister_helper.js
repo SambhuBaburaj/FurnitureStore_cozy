@@ -3,6 +3,11 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const client = require('twilio')(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
+const MongoWallet=require("../Connections/UserSchema").UserWallet
+const MongoUserData=require("../Connections/UserSchema").user_data
+
+
+
 
 
 
@@ -81,8 +86,20 @@ const New_user = async (req, res) => {
   });
   console.log(req.body.user_email);
   if (duplicate) {
-    res.render("user/User-login", { duplicate: "email already exist" ,cartdata:await cartdata(req.session.user)});
+    res.render("user/User-login", { duplicate: "email already exist" ,cartdata:await cartdata(req.session.user),Category:await CategoryList()});
   } else {
+
+
+
+
+
+
+
+
+
+
+
+
 
     const hashed = await secure_password(req.body.user_password);
 
@@ -94,7 +111,30 @@ const New_user = async (req, res) => {
       isBlocked:0,
       date:new Date()
     }); 
-    new_user.save();
+    new_user.save((e,s)=>
+    {
+      if(e)
+      {
+      console.log( "rgesrfer", e);
+      }
+      else
+      {
+console.log(s);
+
+
+      }
+    });
+
+
+    const newUserWallet=new MongoWallet({
+
+      userId:new_user._id,
+      balance:0
+    })
+    newUserWallet.save()
+    
+
+
     res.render("user/User-login",{logout:"account created",Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
   }
 };
@@ -187,7 +227,7 @@ const NumberVerification =async(req,res,next)=>
    
   else
   {
-res.render("user/OTPnumber",{wrongnumber:"entered number does not exist",cartdata:await cartdata(req.session.user)})
+res.render("user/OTPnumber",{wrongnumber:"entered number does not exist",cartdata:await cartdata(req.session.user),Category:await CategoryList()})
 
   }
 next()
@@ -214,7 +254,7 @@ const OtpValidation=(req,res,next)=>
         }else{
  console.log("its not working");
 
-res.render("user/OtpConfirm",{otpvalue:"invalid OTP",cartdata:await cartdata(req.session.user)})
+res.render("user/OtpConfirm",{otpvalue:"invalid OTP",cartdata:await cartdata(req.session.user),Category:await CategoryList()})
          next()
         }
        })

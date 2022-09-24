@@ -582,3 +582,42 @@ function donutchart()
 }
   })
 }
+function refund(refund)
+{
+event.preventDefault()
+
+
+
+swal({
+  title: "Are you sure?",
+  text: "you  wsnt to refund this user" ,
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+}).then((willDelete) => {
+  if (willDelete) {
+    $.ajax({
+      type: "POST",
+      url: "/admin/refund",
+      data: {
+       
+ order:refund
+      },
+      dataType: "json",
+      success: (response) => {
+
+   
+        swal("refunded").then (()=>
+        {
+          location.reload()
+        })
+
+ 
+        // setTimeout(location.reload(), 5000);
+      },
+    });
+  } else {
+    swal("canceled");
+  }
+});
+}

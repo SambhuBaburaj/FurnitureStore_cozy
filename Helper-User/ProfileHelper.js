@@ -4,6 +4,9 @@ const MongoCart = require("../Connections/UserSchema").CartData;
 const MongoOrder = require("../Connections/UserSchema").OrderDetails;
 const MongoUser = require("../Connections/UserSchema").user_data;
 const MongoUserData=require("../Connections/UserSchema").user_data
+const MongoWallet=require("../Connections/UserSchema").UserWallet
+const mongowalhis=require("../Connections/UserSchema").WalletHistory
+
 
 const MongoAddress = require("../Connections/UserSchema").address;
 const session = require("express-session");
@@ -58,13 +61,17 @@ const MainProfile = async (req, res) => {
   const UserOrder = await MongoOrder.find({ userId: user._id });
 
   const Address = await MongoAddress.find({ UserId: user._id });
-  console.log(Address);
+  console.log(user);
+  const wallet=await MongoWallet.findOne({userId:user._id})
+  console.log(wallet);
+
   res.render("user/User-profile", {
     Category: await CategoryList(),
     Orders: UserOrder,
     user: user,
     address: Address,cartdata:await cartdata(req.session.user)
-  });
+    ,wallet:wallet.balance
+  }); 
 };
 
 const SingleOrder = async (req, res) => {
@@ -77,10 +84,10 @@ const SingleOrder = async (req, res) => {
     { $unwind: "$products" },
     {
       $project: { ItemId: "$products.ItemId", Quantity: "$products.Quantity" },
-    },
+    }, 
     {
       $lookup: {
-        from: "productdetails",
+        from: "productdetails", 
         localField: "ItemId",
         foreignField: "_id",
         as: "productdata",
@@ -291,6 +298,21 @@ const removewish = async (req, res) => {
   });
 };
 
+
+const WalletHistory=async(req,res)=>
+{
+
+  const user = await MongoUser.findOne({ email: req.session.user });
+const History=await mongowalhis.find({UserId:user._id})
+console.log(History);
+  res.render("user/WalletHistory",{Category: await CategoryList(),
+    cartdata:await cartdata(req.session.user),walhis:History})
+
+}
+
+
+
+
 module.exports = {
   SingleOrder,
   MainProfile,
@@ -303,4 +325,6 @@ module.exports = {
   wishlistView,
   WishListControl,
   removewish,
+  WalletHistory
+
 };

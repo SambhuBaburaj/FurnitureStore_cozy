@@ -39,15 +39,20 @@
                  
                     <td>
 <% if(element.PaymentStatus=="refund initiated") { %> 
-  <button class="btn btn-secondary">approve refund</button> 
+  <button onclick="refund('<%=element._id  %>')" class="btn btn-secondary">approve refund</button> 
 <!-- add ajax -->
-  <% } else if(element.CancelOrder==1) {%> 
+  <% }else if(element.PaymentStatus=="refunded") { %>
+                       
+    <button class="btn  btn-primary" disabled >successfully refunded</button> 
+   
+ <%} else if(element.CancelOrder==1) {%> 
                         <button class="btn btn-secondary" disabled >canceled</button> 
 
                         <% } else if(element.DeliveryStatus=="delivered") { %>
                        
                           <button class="btn  btn-success" disabled >successfully delivered</button> 
-                      <%  }     else { %> 
+                   
+                          <%  }  else { %> 
                         
                    
                        

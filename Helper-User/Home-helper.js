@@ -17,6 +17,7 @@ const MongoBanner=require("../Connections/UserSchema").BannerControl
 const MongoCoupons=require("../Connections/UserSchema").Coupons
 const MongoUsedCoupons=require("../Connections/UserSchema").CouponsUsed
 const MongoWishList=require("../Connections/UserSchema").UserWishlist
+const mongoWallet=require("../Connections/UserSchema").UserWallet
 
 
 /* GET home page. */
@@ -94,6 +95,7 @@ if(!wishlist)
 } 
 
 else{
+
     res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:wishlist.Products,cartdata:await cartdata(req.session.user)});
 
 }
@@ -122,6 +124,7 @@ const ViewSingle=async(req,res,next)=>
     // console.log(req.session.returnto);
 SingleProductData=await ProductStore.findOne({_id:req.query.id})
 // console.log(SingleProductData);
+
 NewPrice=Math.trunc(SingleProductData.Price-(SingleProductData.Price*SingleProductData.Discount)/100)
 // console.log(NewPrice);
 if(req.session.user)
@@ -308,6 +311,7 @@ res.redirect("/AddCart")
 
 const CheckOut=async(req,res)=>
 { 
+    console.log(req.session.couponid,);
     // console.log(req.session.user);
     const UserId=await MongoUserData.findOne({email:req.session.user});
     cartDetails=await MongoCart.findOne({UserId:UserId._id})
@@ -360,7 +364,7 @@ const user=await MongoUserData.findOne({email:req.session.user})
 const address=await MongoAddress.find({userID:user.id})
 
 
-console.log(address);
+
 
 if(quantity==0)
 {
@@ -368,7 +372,10 @@ if(quantity==0)
 }
 else
 {
-    res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user)})
+   const wallet=await mongoWallet.findOne({userId:user._id})
+
+res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user),wallet:wallet.balance})
+
 }
 } 
 
@@ -550,7 +557,7 @@ const GrantTotal=TotalPrice-discount
 console.log(req.body.coupon);
 req.session.coupon=Math.round(discount)
 req.session.couponid=req.body.coupon;
-
+console.log(req.session.couponid);
 res.json({
     status:"applied",
     discount:Math.round(discount),

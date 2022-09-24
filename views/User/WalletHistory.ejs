@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+
+
+
+        <div class="mt-5 container">
+            <div class="col-12">
+                <div class="card m-b-30">
+                    <div class="card-body">
+
+                        <h4 class="mt-0 header-title">Wallet History</h4>
+                        <!-- <p class="sub-title">DataTables has most features enabled by
+                            default, so all you need to do to use it with your own tables is to call
+                            the construction function: <code>$().DataTable();</code>.
+                        </p> -->
+
+                        <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>type of transaction</th>
+                                <th>details</th>
+                                <th>orderId</th>
+
+                                <th>amount</th>
+                            
+                            </tr>
+                            </thead>
+
+
+                            <tbody>
+                                <% walhis.forEach(element => { %>
+                                    
+                                    <tr>
+                                        <td><%= (element.date).toDateString() %><br><%= (element.date).toLocaleTimeString();  %></td>
+                                        <td><%= element.type%></td>
+                                        <td><%= element.details%></td>
+                                        <td><%= element.orderId%></td>
+                                        <td>₹ <%= element.Amount%></td>
+        
+                                
+                                      
+                                    </tr>
+                            <%    })%> 
+                         
+                        
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+
+
+<%- include('partials/footer') %>
+
+<script src="assets/js/vendor/vendor.min.js"></script>
+<script src="assets/js/plugins/plugins.min.js"></script>
+<script src="assets/js/userajax.js"></script>
+
+<!-- Main Js -->
+<script src="assets/js/main.js"></script>
+<script src="/assetsAdmin/js/jquery.min.js"></script>
+<script src="/assetsAdmin/js/bootstrap.bundle.min.js"></script>
+<script src="/assetsAdmin/js/jquery.slimscroll.js"></script>
+<script src="/assetsAdmin/js/waves.min.js"></script>
+
+<!-- Required datatable js -->
+<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../plugins/datatables/dataTables.bootstrap4.min.js"></script>
+<!-- Buttons examples -->
+<script src="../plugins/datatables/dataTables.buttons.min.js"></script>
+<script src="../plugins/datatables/buttons.bootstrap4.min.js"></script>
+<script src="../plugins/datatables/jszip.min.js"></script>
+<script src="../plugins/datatables/pdfmake.min.js"></script>
+<script src="../plugins/datatables/vfs_fonts.js"></script>
+<script src="../plugins/datatables/buttons.html5.min.js"></script>
+<script src="../plugins/datatables/buttons.print.min.js"></script>
+<script src="../plugins/datatables/buttons.colVis.min.js"></script>
+<!-- Responsive examples -->
+<script src="../plugins/datatables/dataTables.responsive.min.js"></script>
+<script src="../plugins/datatables/responsive.bootstrap4.min.js"></script>
+
+<!-- Datatable init js -->
+<script src="/assetsAdmin/pages/datatables.init.js"></script>  
+
+<!-- App js -->
+<script src="/assetsAdmin/js/app.js"></script>
