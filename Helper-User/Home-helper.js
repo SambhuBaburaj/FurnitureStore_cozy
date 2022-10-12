@@ -23,6 +23,7 @@ const mongoWallet=require("../Connections/UserSchema").UserWallet
 /* GET home page. */
 // const CategoryList=MongoCategory.find()
 
+
 async function cartdata(user)
 {
     console.log(user);
@@ -63,6 +64,9 @@ const CategoryList=async()=>
 {
    return await MongoCategory.find()
 }
+
+
+
 
 let wishlist,user
 const GetProduct=async(req,res,next)=>
@@ -164,7 +168,8 @@ if(req.session.user)
 else{
     wishlist=[0]
 } 
-    res.render("user/SingleProduct",{user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
+const user =await MongoUserData.findOne({email:req.session.user})
+    res.render("user/SingleProduct",{name:user,user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
 
 }
 
@@ -282,7 +287,9 @@ next()
      ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
  }}])
 //  console.log(CartProduct);
-   res.render("user/Cart",{user: req.session.user,Category:await CategoryList(),CartItem:CartProduct,cartdata:await cartdata(req.session.user)})
+const user =await MongoUserData.findOne({email:req.session.user})
+
+   res.render("user/Cart",{name:user,user: req.session.user,Category:await CategoryList(),CartItem:CartProduct,cartdata:await cartdata(req.session.user)})
  } 
 
 //  quantity control.................
@@ -400,8 +407,9 @@ if(quantity==0)
 else
 {
    const wallet=await mongoWallet.findOne({userId:user._id})
+   const user =await MongoUserData.findOne({email:req.session.user})
 
-res.render("user/CheckOut",{user: req.session.user,Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user),wallet:wallet.balance})
+res.render("user/CheckOut",{name:user,user: req.session.user,Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user),wallet:wallet.balance})
 
 }
 } 
@@ -503,7 +511,9 @@ await MongoCart.deleteOne({UserId:user._id}, function (error, success) {
     } else {
 console.log(success);
     }}).clone()
-res.render("user/OrderPlaced",{user: req.session.user,Category:await CategoryList() ,orderID:OrderDetails._id,cartdata:await cartdata(req.session.user)});
+    const user =await MongoUserData.findOne({email:req.session.user})
+
+res.render("user/OrderPlaced",{name:user,user: req.session.user,Category:await CategoryList() ,orderID:OrderDetails._id,cartdata:await cartdata(req.session.user)});
 
 }
 

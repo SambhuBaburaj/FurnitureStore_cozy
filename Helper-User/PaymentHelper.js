@@ -561,8 +561,8 @@ const PaypalOrderPlaced=async(req,res)=>
         }
       }).clone();
   
-  
-      res.render("user/OrderPlaced", {user: req.session.user,
+
+      res.render("user/OrderPlaced", {name:user,user: req.session.user,
         Category: await CategoryList(),
         orderID: OrderDetails._id,cartdata:await cartdata(req.session.user)
       });
@@ -826,7 +826,7 @@ const razersuccess=async (req,res)=>
     }).clone();
 
 
-    res.render("user/OrderPlaced", {user: req.session.user,
+    res.render("user/OrderPlaced", {name:user,user: req.session.user,
       Category: await CategoryList(),
       orderID: OrderDetails._id,cartdata:await cartdata(req.session.user)
     });

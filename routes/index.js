@@ -22,12 +22,12 @@ paypal.configure({
 /* GET home page. */
 
 
-router.use((req, res, next) => {
+// router.use((req, res, next) => {
 
-  req.session.user="sambhubaburaj007@gmail.com"
-  next()
+//   req.session.user="sambhubaburaj007@gmail.com"
+//   next()
  
- })
+//  })
 
 
  
@@ -125,12 +125,48 @@ router.post("/OtpValidation",UserHelper.OtpValidation,async(req,res)=>
 })
 
 
-router.get("/SubCatList",ProductHelper.getCategory,(req,res)=>
+router.get("/SubCatList",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},ProductHelper.getCategory,(req,res)=>
 {
 })
 
 
-router.get("/ProductSingle",ProductHelper.ViewSingle,(req,res)=>
+router.get("/ProductSingle",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},ProductHelper.ViewSingle,(req,res)=>
 {
 
 
@@ -204,11 +240,30 @@ else
 
 
 },PaymentHelper.OrderCheckout)
-router.get("/CODOrderSuccess",async (req,res,next)=>
+router.get("/CODOrderSuccess",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},async (req,res,next)=>
 {
 console.log(req.query,"sfiuajr");
+const user =await MongoUserData.findOne({email:req.session.user})
 
-     res.render("user/OrderPlaced", {
+     res.render("user/OrderPlaced", {name:user,
       Category: await CategoryList(),
       orderID: req.query.data,cartdata:await cartdata(req.session.user)
     });
@@ -236,7 +291,25 @@ next()
 )
 
 
-router.get("/OrderFailed",(req,res)=>
+router.get("/OrderFailed",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},(req,res)=>
 {
 req.send("unsuccess")
 }
@@ -244,7 +317,25 @@ req.send("unsuccess")
 
 
 
-router.get("/YourOrders",ProfileHelper.SingleOrder,async(req,res)=>
+router.get("/YourOrders",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},ProfileHelper.SingleOrder,async(req,res)=>
 {
 
   // console.log(req.query,"f7fgf");
@@ -270,7 +361,25 @@ else
 
 },ProfileHelper.MainProfile);
 
-router.post("/cancelOrder",(req,res,next)=>
+router.post("/cancelOrder",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},(req,res,next)=>
 {
 console.log("here");
 next()
@@ -313,7 +422,25 @@ router.post("/DeleteAddress",ProfileHelper.addreessdelete)
 router.get("/editAddress",ProfileHelper.addressEditer)
 
 router.post("/saveupdateAddress",ProfileHelper.updateaddress)
-router.post("/ApplyCoupon",ProductHelper.ApplyCoupon)
+router.post("/ApplyCoupon",(req,res,next)=>//must add session check
+{
+
+
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
+
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+},ProductHelper.ApplyCoupon)
 
 router.get("/MyWishlist",(req,res,next)=>//must add session check
 {

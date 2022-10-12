@@ -65,7 +65,7 @@ const MainProfile = async (req, res) => {
   const wallet=await MongoWallet.findOne({userId:user._id})
   console.log(wallet);
 
-  res.render("user/User-profile", {user: req.session.user,
+  res.render("user/User-profile", {name:user,user: req.session.user,
     Category: await CategoryList(),
     Orders: UserOrder,
     user: user,
@@ -98,8 +98,9 @@ const SingleOrder = async (req, res) => {
     },
   ]);
   console.log(orderDetails);
+  const user =await MongoUserData.findOne({email:req.session.user})
 
-  res.render("user/YourOrders", {user: req.session.user,
+  res.render("user/YourOrders", {name:user,user: req.session.user,
     Category: await CategoryList(),
     productdata: ProductDetails,
     orderDetails: orderDetails,cartdata:await cartdata(req.session.user)
@@ -196,8 +197,9 @@ const addressEditer = async (req, res) => {
     _id: ObjectId(req.query.addressid),
   });
   console.log(Address);
+  const user =await MongoUserData.findOne({email:req.session.user})
 
-  res.render("user/EditAddress", {user: req.session.user,
+  res.render("user/EditAddress", {name:user,user: req.session.user,
     Category: await CategoryList(),
     Address: Address.address,
     id: Address,cartdata:await cartdata(req.session.user)
@@ -247,7 +249,9 @@ const wishlistView = async (req, res) => {
     { $unwind: "$product" },
   ]);
   console.log(wish);
-  res.render("user/WishList", {user: req.session.user,
+
+
+  res.render("user/WishList", {name:user,user: req.session.user,
     Category: await CategoryList(),
     wishlist: wish,cartdata:await cartdata(req.session.user)
   });
@@ -305,7 +309,8 @@ const WalletHistory=async(req,res)=>
   const user = await MongoUser.findOne({ email: req.session.user });
 const History=await mongowalhis.find({UserId:user._id})
 console.log(History);
-  res.render("user/WalletHistory",{user: req.session.user,Category: await CategoryList(),
+
+  res.render("user/WalletHistory",{name:user,user: req.session.user,Category: await CategoryList(),
     cartdata:await cartdata(req.session.user),walhis:History.reverse()})
 
 }
