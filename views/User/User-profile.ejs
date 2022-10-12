@@ -1,4 +1,5 @@
 <%- include('partials/header') %>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
 
 <link rel="stylesheet" href="/userassets/css/main.css">
 
@@ -52,7 +53,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="table">
+                                                <table id="odertable" class="table">
                                                     <thead>
 
 
@@ -214,19 +215,44 @@
 
 
 
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
 
 
+
+<script>
+    $(document).ready( function () {
+        $('#odertable').DataTable();
+    } );
+    
+    
+    </script>
+<script>
+    $(document).ready( function () {
+        $('#odertable').DataTable();
+    } );
+    
+    
+    </script>
 
 
 
 
 
 <%- include('partials/footer') %>
+
+
+
+
+  
+
+
 <script src="assets/js/userajax.js"></script>
 
 <script src="assets/js/vendor/vendor.min.js"></script>
 <script src="assets/js/plugins/plugins.min.js"></script>
 
 <!-- Main Js -->
+
+
 <script src="assets/js/main.js"></script>

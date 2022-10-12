@@ -22,12 +22,12 @@ paypal.configure({
 /* GET home page. */
 
 
-router.use((req, res, next) => {
+// router.use((req, res, next) => {
 
-  req.session.user="sambhubaburaj007@gmail.com"
-  next()
+//   req.session.user="sambhubaburaj007@gmail.com"
+//   next()
  
- })
+//  })
 
 
  
@@ -188,9 +188,6 @@ else
  )
 router.post("/OrderCheckout",PaymentHelper.OrderCheckout,(req,res)=>
 {
-
-
-
 
 })
 router.get("/CODOrderSuccess",async (req,res,next)=>

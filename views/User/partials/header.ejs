@@ -68,7 +68,14 @@
                     <!-- Header Top Message Start -->
                     <div class="col text-center text-lg-left">
                         <div class="header-top-massege">
-                            <p>Welcome   </p>
+                            <% if(locals.name) {%> 
+                                <p>Welcome  <%= locals.name.username  %>  </p>
+
+                                <% } else{ %> 
+
+                                    <p>Welcome guest </p>
+
+                                    <% } %> 
                         </div>
                     </div>
                     <!-- Header Top Message End -->

@@ -21,7 +21,7 @@ const MongoCart = require("../Connections/UserSchema").CartData;
 const MongoUserData = require("../Connections/UserSchema").user_data;
 const MongoAddress = require("../Connections/UserSchema").address;
 const MongoUsedCoupons=require("../Connections/UserSchema").CouponsUsed
-
+const mongowalhis=require("../Connections/UserSchema").WalletHistory
 const mongoWallet=require("../Connections/UserSchema").UserWallet
 
 
@@ -355,6 +355,9 @@ if(wallet.balance>TotalPrice)
     var newRoomId = room._id;
 
     
+
+
+
   });
 
  mongoWallet.updateOne({userId:UserId._id},{$inc:{balance:-(Math.round(TotalPrice))}},(e,s)=>
@@ -383,6 +386,18 @@ coupon.save()
 
 }
 
+
+
+const walletHistory=new mongowalhis({
+  UserId:user._id,
+  date:new Date(),
+type:"debited",
+details:"product Purchase",
+Amount:-Math.round(TotalPrice),
+orderId:OrderDetails._id
+})
+
+walletHistory.save()
 
   await MongoCart.deleteOne({ UserId: user._id }, function (error, success) {
     if (error) {
@@ -547,7 +562,7 @@ const PaypalOrderPlaced=async(req,res)=>
       }).clone();
   
   
-      res.render("user/OrderPlaced", {
+      res.render("user/OrderPlaced", {user: req.session.user,
         Category: await CategoryList(),
         orderID: OrderDetails._id,cartdata:await cartdata(req.session.user)
       });
@@ -811,7 +826,7 @@ const razersuccess=async (req,res)=>
     }).clone();
 
 
-    res.render("user/OrderPlaced", {
+    res.render("user/OrderPlaced", {user: req.session.user,
       Category: await CategoryList(),
       orderID: OrderDetails._id,cartdata:await cartdata(req.session.user)
     });

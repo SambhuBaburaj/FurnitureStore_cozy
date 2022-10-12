@@ -157,7 +157,7 @@ console.log(order);
 const walletHistory=new mongowalhis({
   UserId:order.userId,
   date:new Date(),
-type:"debit",
+type:"credited",
 details:"product refund",
 Amount:order.TotalAmount,
 orderId:order._id

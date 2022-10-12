@@ -86,7 +86,7 @@ const New_user = async (req, res) => {
   });
   console.log(req.body.user_email);
   if (duplicate) {
-    res.render("user/User-login", { duplicate: "email already exist" ,cartdata:await cartdata(req.session.user),Category:await CategoryList()});
+    res.render("user/User-login", { user: req.session.user,duplicate: "email already exist" ,cartdata:await cartdata(req.session.user),Category:await CategoryList()});
   } else {
 
 
@@ -135,7 +135,7 @@ console.log(s);
     
 
 
-    res.render("user/User-login",{logout:"account created",Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
+    res.render("user/User-login",{user: req.session.user,logout:"account created",Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
   }
 };
 
@@ -179,13 +179,13 @@ console.log(req.session.returnto);
     res.redirect("/")
    }
   } else {
-    res.render("user/User-login", {
+    res.render("user/User-login", {user: req.session.user,
       title: "express",
       duplicate: "email/password is incorrect",Category:await CategoryList(),cartdata:await cartdata(req.session.user)
     });
   } 
 } else { 
-  res.render("user/User-login", {
+  res.render("user/User-login", {user: req.session.user,
     title: "express",
     duplicate: "email/password is incorrect",Category:await CategoryList(),cartdata:await cartdata(req.session.user)
 
@@ -219,7 +219,7 @@ const NumberVerification =async(req,res,next)=>
     .verifications
     .create({to:'+91'+MobileNumber, channel: 'sms'})
     .then(async(verification) => {
-    res.render("user/OtpConfirm",{number:MobileNumber,Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
+    res.render("user/OtpConfirm",{user: req.session.user,number:MobileNumber,Category:await CategoryList(),cartdata:await cartdata(req.session.user)})
     })
     .catch((err)=>console.log("its an error",err));
 }
@@ -227,7 +227,7 @@ const NumberVerification =async(req,res,next)=>
    
   else
   {
-res.render("user/OTPnumber",{wrongnumber:"entered number does not exist",cartdata:await cartdata(req.session.user),Category:await CategoryList()})
+res.render("user/OTPnumber",{user: req.session.user,wrongnumber:"entered number does not exist",cartdata:await cartdata(req.session.user),Category:await CategoryList()})
 
   }
 next()
@@ -254,7 +254,7 @@ const OtpValidation=(req,res,next)=>
         }else{
  console.log("its not working");
 
-res.render("user/OtpConfirm",{otpvalue:"invalid OTP",cartdata:await cartdata(req.session.user),Category:await CategoryList()})
+res.render("user/OtpConfirm",{user: req.session.user,otpvalue:"invalid OTP",cartdata:await cartdata(req.session.user),Category:await CategoryList()})
          next()
         }
        })

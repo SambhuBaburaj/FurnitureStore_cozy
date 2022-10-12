@@ -65,7 +65,7 @@ const MainProfile = async (req, res) => {
   const wallet=await MongoWallet.findOne({userId:user._id})
   console.log(wallet);
 
-  res.render("user/User-profile", {
+  res.render("user/User-profile", {user: req.session.user,
     Category: await CategoryList(),
     Orders: UserOrder,
     user: user,
@@ -99,7 +99,7 @@ const SingleOrder = async (req, res) => {
   ]);
   console.log(orderDetails);
 
-  res.render("user/YourOrders", {
+  res.render("user/YourOrders", {user: req.session.user,
     Category: await CategoryList(),
     productdata: ProductDetails,
     orderDetails: orderDetails,cartdata:await cartdata(req.session.user)
@@ -197,7 +197,7 @@ const addressEditer = async (req, res) => {
   });
   console.log(Address);
 
-  res.render("user/EditAddress", {
+  res.render("user/EditAddress", {user: req.session.user,
     Category: await CategoryList(),
     Address: Address.address,
     id: Address,cartdata:await cartdata(req.session.user)
@@ -247,7 +247,7 @@ const wishlistView = async (req, res) => {
     { $unwind: "$product" },
   ]);
   console.log(wish);
-  res.render("user/WishList", {
+  res.render("user/WishList", {user: req.session.user,
     Category: await CategoryList(),
     wishlist: wish,cartdata:await cartdata(req.session.user)
   });
@@ -305,8 +305,8 @@ const WalletHistory=async(req,res)=>
   const user = await MongoUser.findOne({ email: req.session.user });
 const History=await mongowalhis.find({UserId:user._id})
 console.log(History);
-  res.render("user/WalletHistory",{Category: await CategoryList(),
-    cartdata:await cartdata(req.session.user),walhis:History})
+  res.render("user/WalletHistory",{user: req.session.user,Category: await CategoryList(),
+    cartdata:await cartdata(req.session.user),walhis:History.reverse()})
 
 }
 

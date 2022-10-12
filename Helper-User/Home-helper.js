@@ -64,7 +64,7 @@ const CategoryList=async()=>
    return await MongoCategory.find()
 }
 
-let wishlist
+let wishlist,user
 const GetProduct=async(req,res,next)=>
 {
   
@@ -77,26 +77,28 @@ const banner=await MongoBanner.find()
 if(req.session.user){
 
 
-const user =await MongoUserData.findOne({email:req.session.user})
+ user =await MongoUserData.findOne({email:req.session.user})
 
  wishlist=await MongoWishList.findOne({UserId:user._id})
 
 }
 else{
+
     wishlist=[0] 
 }
+
 
 
 if(!wishlist)
 {
 
-    res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:null,cartdata:await cartdata(req.session.user)});
+    res.render("user/Home", { title: "Express",name:user,user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:null,cartdata:await cartdata(req.session.user)});
  
 } 
 
 else{
 
-    res.render("user/Home", { title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:wishlist.Products,cartdata:await cartdata(req.session.user)});
+    res.render("user/Home", { name:user,title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:wishlist.Products,cartdata:await cartdata(req.session.user)});
 
 }
 
@@ -113,7 +115,32 @@ const SubCat=req.query.SubCat
 const data=await ProductStore.find({$and:[{Category:MainCat},{SubCategory:SubCat}]})
 // console.log(data);
 // NewPrice=Math.trunc(data.Price-(Data.Price*data.Discount)/100)
-    res.render("user/ProductBrowse",{Category:await CategoryList(),Product:data,cartdata:await cartdata(req.session.user)})
+let user,wishlist;
+if(req.session.user){
+
+
+    user =await MongoUserData.findOne({email:req.session.user})
+   
+    wishlist=await MongoWishList.findOne({UserId:user._id})
+   
+   }
+   else{
+     user={
+   username:"guest"
+       }
+       wishlist=[0] 
+   }
+
+
+
+// console.log("wishlist",wishlist);
+
+
+
+
+
+
+    res.render("user/ProductBrowse",{name:user,wishlist:wishlist.Products,user: req.session.user,Category:await CategoryList(),Product:data,cartdata:await cartdata(req.session.user)})
 
 next()
 } 
@@ -137,7 +164,7 @@ if(req.session.user)
 else{
     wishlist=[0]
 } 
-    res.render("user/SingleProduct",{Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
+    res.render("user/SingleProduct",{user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
 
 }
 
@@ -255,7 +282,7 @@ next()
      ItemId: 1, Quantity: 1 ,product: { $arrayElemAt: ['$product',0]}
  }}])
 //  console.log(CartProduct);
-   res.render("user/Cart",{Category:await CategoryList(),CartItem:CartProduct,cartdata:await cartdata(req.session.user)})
+   res.render("user/Cart",{user: req.session.user,Category:await CategoryList(),CartItem:CartProduct,cartdata:await cartdata(req.session.user)})
  } 
 
 //  quantity control.................
@@ -374,7 +401,7 @@ else
 {
    const wallet=await mongoWallet.findOne({userId:user._id})
 
-res.render("user/CheckOut",{Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user),wallet:wallet.balance})
+res.render("user/CheckOut",{user: req.session.user,Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user),wallet:wallet.balance})
 
 }
 } 
@@ -476,7 +503,7 @@ await MongoCart.deleteOne({UserId:user._id}, function (error, success) {
     } else {
 console.log(success);
     }}).clone()
-res.render("user/OrderPlaced",{Category:await CategoryList() ,orderID:OrderDetails._id,cartdata:await cartdata(req.session.user)});
+res.render("user/OrderPlaced",{user: req.session.user,Category:await CategoryList() ,orderID:OrderDetails._id,cartdata:await cartdata(req.session.user)});
 
 }
 
