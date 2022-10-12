@@ -60,7 +60,16 @@
                             Account</a>
                     </li>
                     <li class="li"><a class="single-link" href="/AddCart">My Cart</a></li>
-                    <li class="li"><a class="single-link" href="/My-account">Login</a></li>
+                
+
+                    
+                    <% if(!locals.user) { %> 
+                        <li class="li"><a class="single-link" href="/My-account">Login</a></li>
+                    <% } else { %>
+
+                        <li class="li"><a class="single-link" href="/UserLogout">Logout</a></li>
+                        <% 
+                            } %> 
                     <li class="li"><a class="single-link" href="/MyWishlist">Wishlist</a></li>
                     <!-- <li class="li"><a class="single-link" href="checkout.html">Checkout</a></li> -->
                 </ul>
