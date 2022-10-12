@@ -631,8 +631,8 @@ console.log("inhere",paymamount);
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": "http://localhost:3000/OrderSuccess",
-          "cancel_url": "http://localhost:3000/OrderFailed"
+          "return_url": "/OrderSuccess",
+          "cancel_url": "/OrderFailed"
       },
       "transactions": [{
           "item_list": {
