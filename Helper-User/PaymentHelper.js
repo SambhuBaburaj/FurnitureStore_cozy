@@ -631,8 +631,8 @@ console.log("inhere",paymamount);
           "payment_method": "paypal"
       },
       "redirect_urls": {
-          "return_url": "cozyfurniture.cf/OrderSuccess",
-          "cancel_url": "cozyfurniture.cf/OrderFailed"
+          "return_url": "https://www.cozyfurniture.cf/OrderSuccess",
+          "cancel_url": "https://www.cozyfurniture.cf/OrderFailed"
       },
       "transactions": [{
           "item_list": {
