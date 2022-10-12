@@ -22,12 +22,12 @@ paypal.configure({
 /* GET home page. */
 
 
-// router.use((req, res, next) => {
+router.use((req, res, next) => {
 
-//   req.session.user="sambhubaburaj007@gmail.com"
-//   next()
+  req.session.user="sambhubaburaj007@gmail.com"
+  next()
  
-//  })
+ })
 
 
  
@@ -186,10 +186,24 @@ else
   
  },ProductHelper.CheckOut
  )
-router.post("/OrderCheckout",PaymentHelper.OrderCheckout,(req,res)=>
+router.post("/OrderCheckout",(req,res,next)=>
 {
+  return new Promise(async (resolve, reject) => {
+    // req.session.user="sambhubaburaj007@gmail.com"
 
-})
+if(!req.session.user) 
+{
+  res.redirect("/UserLogin")
+}
+else
+(
+  next()
+)   
+
+  }) 
+
+
+},PaymentHelper.OrderCheckout)
 router.get("/CODOrderSuccess",async (req,res,next)=>
 {
 console.log(req.query,"sfiuajr");

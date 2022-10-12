@@ -140,7 +140,7 @@ if(req.session.user){
 
 
 
-    res.render("user/ProductBrowse",{name:user,wishlist:wishlist.Products,user: req.session.user,Category:await CategoryList(),Product:data,cartdata:await cartdata(req.session.user)})
+    res.render("User/ProductBrowse",{name:user,wishlist:wishlist.Products,user: req.session.user,Category:await CategoryList(),Product:data,cartdata:await cartdata(req.session.user)})
 
 next()
 } 

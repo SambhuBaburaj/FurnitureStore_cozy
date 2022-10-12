@@ -190,14 +190,14 @@ function payment() {
 
 $("#placeOrder").submit((event) => {
   event.preventDefault();
-
+console.log("first here");
   $.ajax({
     url: "/OrderCheckout",
     method: "post",
     data: $("#placeOrder").serialize(),
     success: (response) => {
       console.log("resposer", response);
-      console.log(response);
+      console.log(response,"whats trhe resposn");
       if (response.name == "COD") {
         // location.href = '/OrderSuccess/'+response;
         location.href = "/CODOrderSuccess?data=" + response.id;

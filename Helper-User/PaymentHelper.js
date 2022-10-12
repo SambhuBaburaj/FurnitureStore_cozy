@@ -83,7 +83,7 @@ const CategoryList = async () => {
 
 
 const OrderCheckout = async (req, res) => {
-
+console.log("jhgiuernhnripugningd");
 console.log(req.session.couponid);
   console.log(req.body);
     req.session.address=req.body
@@ -95,9 +95,9 @@ console.log(req.session.couponid);
     { $unwind: "$product" },
     { $project: { ItemId: "$product.ItemId", Quantity: "$product.Quantity" } },
     {
-      $lookup: {
+      $lookup: { 
         from: "productdetails",
-        localField: "ItemId",
+        localField: "ItemId", 
         foreignField: "_id",
         as: "product",
       },
@@ -244,7 +244,7 @@ if(req.session.couponid)
 
 
   else if (details.delivery == "Paypal") {
-
+console.log("its here with me");
 res.json({name:"paypal",
 total:TotalPrice})
 
