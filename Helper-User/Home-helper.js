@@ -96,13 +96,13 @@ else{
 if(!wishlist)
 {
 
-    res.render("User/Home", { title: "Express",name:user,user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:null,cartdata:await cartdata(req.session.user)});
+    res.render("user/Home", { title: "Express",name:user,user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:null,cartdata:await cartdata(req.session.user)});
  
 } 
 
 else{
 
-    res.render("User/Home", { name:user,title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:wishlist.Products,cartdata:await cartdata(req.session.user)});
+    res.render("user/Home", { name:user,title: "Express",user: req.session.user ,Product:ProductList,Category:listofcat ,length:length,banner:banner,wishlist:wishlist.Products,cartdata:await cartdata(req.session.user)});
 
 }
 
@@ -169,7 +169,7 @@ else{
     wishlist=[0]
 } 
 const user =await MongoUserData.findOne({email:req.session.user})
-    res.render("User/SingleProduct",{name:user,user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
+    res.render("user/SingleProduct",{name:user,user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
 
 }
 
