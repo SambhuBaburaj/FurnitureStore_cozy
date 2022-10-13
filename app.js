@@ -9,7 +9,8 @@ var logger = require('morgan');
 const mongooseConnection=require("./Connections/mongoose")
 const mongooseSchema=require("./Connections/UserSchema")
 var cors = require('cors')
-
+const MongoUserData=require("./Connections/UserSchema").user_data
+const MongoCategory=require("./Connections/AdminSchema").MainCategory
 
 
 
@@ -78,24 +79,26 @@ app.use("/admin",adminRouter)
 
 
 
-// app.use(function(req, res, next) {
-//   next(createError(404));
-// });
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
 // // error handler
-// app.use(function(err, req, res, next) {
-//   // set locals, only providing error in development
-//   res.locals.message = err.message;
-//   res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(async function(err, req, res, next) {
+  // set locals, only providing error in development
+  // res.locals.message = err.message;
+  // res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-//   // render the error page
-//   res.status(err.status || 500);
+  // render the error page
+  res.status(err.status || 500);
+const user =await MongoUserData.findOne({email:req.session.user})
+const cat=await MongoCategory.find()
+  res.render("User/page404", {name:user,
+    Category: cat,
+   cartdata:[]
+  });
 
-//   if(req.session.user)
-//   {
-//   res.render("user/page404");
-//   }
-// });  
+});  
 
 
 
