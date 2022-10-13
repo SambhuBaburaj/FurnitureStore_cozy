@@ -4,7 +4,7 @@ var router = express.Router();
 const UserHelper = require("../Helper-User/UserRegister_helper");
 const ProductHelper=require("../Helper-User/Home-helper")
 const PaymentHelper=require("../Helper-User/PaymentHelper")
-const ProfileHelper=require("../Helper-User/ProfileHelper")
+const ProfileHelper=require("../Helper-User/ProfileHelper") 
 const MongoUserData=require("../Connections/UserSchema").user_data
 const MongoCategory=require("../Connections/AdminSchema").MainCategory
 const MongoCart=require("../Connections/UserSchema").CartData
@@ -129,19 +129,7 @@ router.get("/SubCatList",(req,res,next)=>//must add session check
 {
 
 
-  return new Promise(async (resolve, reject) => {
-    // req.session.user="sambhubaburaj007@gmail.com"
-
-if(!req.session.user) 
-{
-  res.redirect("/UserLogin")
-}
-else
-(
   next()
-)   
-
-  }) 
 
 },ProductHelper.getCategory,(req,res)=>
 {

@@ -406,8 +406,9 @@ if(quantity==0)
 }
 else
 {
-   const wallet=await mongoWallet.findOne({userId:user._id})
    const user =await MongoUserData.findOne({email:req.session.user})
+
+   const wallet=await mongoWallet.findOne({userId:user._id})
 
 res.render("user/CheckOut",{name:user,user: req.session.user,Category:await CategoryList(),CheckoutData:CheckoutData,address:address,cartdata:await cartdata(req.session.user),wallet:wallet.balance})
 

@@ -114,7 +114,7 @@ else{
     yearcount[count]=i
     revenue[count]=0;
     count++
-}
+} 
 
 }
 
