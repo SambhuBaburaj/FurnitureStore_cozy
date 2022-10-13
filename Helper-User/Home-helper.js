@@ -169,7 +169,7 @@ else{
     wishlist=[0]
 } 
 const user =await MongoUserData.findOne({email:req.session.user})
-    res.render("user/SingleProduct",{name:user,user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
+    res.render("User/SingleProduct",{name:user,user: req.session.user,Category:await CategoryList(),SingleProductData:SingleProductData,NewPrice:NewPrice,cartdata:await cartdata(req.session.user),wishlist:wishlist.Products})
 
 }
 

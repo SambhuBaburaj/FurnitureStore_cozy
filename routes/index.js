@@ -152,20 +152,7 @@ router.get("/ProductSingle",(req,res,next)=>//must add session check
 {
 
 
-  return new Promise(async (resolve, reject) => {
-    // req.session.user="sambhubaburaj007@gmail.com"
-
-if(!req.session.user) 
-{
-  res.redirect("/UserLogin")
-}
-else
-(
-  next()
-)   
-
-  }) 
-
+next()
 },ProductHelper.ViewSingle,(req,res)=>
 {
 
