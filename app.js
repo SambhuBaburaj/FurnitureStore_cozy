@@ -93,7 +93,7 @@ app.use(async function(err, req, res, next) {
   res.status(err.status || 500);
 const user =await MongoUserData.findOne({email:req.session.user})
 const cat=await MongoCategory.find()
-  res.render("User/page404", {name:user,
+  res.render("user/page404", {name:user,
     Category: cat,
    cartdata:[]
   });
